@@ -993,7 +993,7 @@ function initSearchAndFilters() {
    QR CODE GENERATOR & SHARING
    ========================================================================== */
 function initQRGenerator() {
-  let targetUrl = "https://campos0.github.io/Pagina-Los-3-osos-MENUS/";
+  let targetUrl = "https://campos0.github.io/Los3Osos/";
   if (typeof window !== 'undefined' && window.location.href && !window.location.href.startsWith('file://')) {
     targetUrl = window.location.href;
   }
