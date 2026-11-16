@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>TODO ASADO LOS 3 OSOS | Menú Digital Interactivo & Eventos</title>
+  <meta name="description" content="Menú digital interactivo de Todo Asado Los 3 Osos. Parrilladas, cortes selectos, hamburguesas al carbón, ahumados estilo Texas y 11 paquetes especiales para eventos y banquetes.">
+  <meta name="keywords" content="Los 3 Osos, Todo Asado, Parrillada, Cortes, Banquete, San Luis Potosi, Menu Digital, Hamburguesas, Taquiza">
+  <meta name="theme-color" content="#c25900">
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:title" content="TODO ASADO LOS 3 OSOS | Menú Digital & Eventos">
+  <meta property="og:description" content="Parrilladas al carbón, cortes finos, paquetes de venta diaria y 11 menús para tus mejores eventos. Cotiza al instante por WhatsApp.">
+  <meta property="og:image" content="assets/img/Imagen Perfil.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/img/Imagen Perfil.jpg">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Oswald -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <header class="top-notice">
+    <span>🔥 ¡En tus mejores eventos! Servicio de parrilladas, banquetes y servicio a domicilio.</span>
+    <span style="opacity: 0.5;">|</span>
+    <a href="https://wa.me/524441425054" target="_blank" rel="noopener">
+      <i class="fa-brands fa-whatsapp"></i> Pedidos: 444 142 5054
+    </a>
+  </header>
+
+  <!-- Hero Header -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <!-- Logo -->
+      <div class="logo-wrapper">
+        <img src="assets/img/Imagen Perfil.jpg" alt="Logo Todo Asado Los 3 Osos" class="brand-logo">
+      </div>
+
+      <div class="brand-sub">Parrilladas & Ahumados</div>
+      <h1 class="brand-title">TODO ASADO LOS 3 OSOS</h1>
+      <p class="brand-tagline">
+        Especialistas en cortes al carbón, ahumados tradicionales y banquetes para tus celebraciones. Elige tu menú favorito o cotiza tu evento al instante.
+      </p>
+
+      <!-- Quick Contact Pills -->
+      <div class="hero-contacts">
+        <a href="tel:4441425054" class="contact-pill phone">
+          <i class="fa-solid fa-phone"></i> 444 142 5054
+        </a>
+        <a href="tel:4442343129" class="contact-pill phone">
+          <i class="fa-solid fa-phone"></i> 444 234 3129
+        </a>
+        <a href="https://wa.me/524441425054?text=%C2%A1Hola%20Todo%20Asado%20Los%203%20Osos!%20Me%20gustar%C3%ADa%20solicitar%20informaci%C3%B3n." target="_blank" rel="noopener" class="contact-pill whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp Principal
+        </a>
+        <a href="https://wa.me/524442343129?text=%C2%A1Hola%20Todo%20Asado%20Los%203%20Osos!%20Me%20gustar%C3%ADa%20solicitar%20informaci%C3%B3n." target="_blank" rel="noopener" class="contact-pill whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp 2
+        </a>
+      </div>
+
+      <!-- Action Buttons & Social Networks -->
+      <div class="hero-actions">
+        <button type="button" class="btn-qr-modal" id="btn-open-qr-modal">
+          <i class="fa-solid fa-qrcode"></i> Ver Código QR / Compartir
+        </button>
+
+        <div class="social-links">
+          <a href="https://www.facebook.com/search/top?q=Todo_asado%20Lostresosos" target="_blank" rel="noopener" class="social-btn" title="Facebook Todo_asado Lostresosos" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/todoasado_los3osos/" target="_blank" rel="noopener" class="social-btn" title="Instagram todoasado_los3osos" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Navigation Tabs -->
+  <nav class="sticky-nav-wrapper">
+    <div class="container">
+      <div class="nav-tabs" role="tablist">
+        <button type="button" class="tab-btn active" data-tab="venta" role="tab">
+          <i class="fa-solid fa-utensils"></i> Menú de Venta <span class="badge-count">11 Platillos</span>
+        </button>
+        <button type="button" class="tab-btn" data-tab="eventos" role="tab">
+          <i class="fa-solid fa-champagne-glasses"></i> Menú de Eventos <span class="badge-count">11 Opciones</span>
+        </button>
+        <button type="button" class="tab-btn" data-tab="cotizador" role="tab">
+          <i class="fa-solid fa-calculator"></i> Cotizador Interactivo
+        </button>
+        <button type="button" class="tab-btn" data-tab="qr" role="tab">
+          <i class="fa-solid fa-qrcode"></i> Código QR & Mesas
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Unified Search & Category Filter Box -->
+    <div class="filter-search-box">
+      <div class="search-input-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="menu-search" class="search-input" placeholder="Buscar platillo, paquete o antojo (ej. arrachera, costilla, alitas)...">
+      </div>
+
+      <!-- Category Filter Chips for Menú de Venta -->
+      <div class="category-chips" id="chips-venta">
+        <button type="button" class="chip-btn active" data-filter="all">Todos los Platillos</button>
+        <button type="button" class="chip-btn" data-filter="paquetes">Paquetes Asados (1/4, 1/2, 3/4)</button>
+        <button type="button" class="chip-btn" data-filter="antojos">Alitas, Burgers & Tortas</button>
+        <button type="button" class="chip-btn" data-filter="complementos">Papas & Guarniciones</button>
+      </div>
+
+      <!-- Category Filter Chips for Menú de Eventos -->
+      <div class="category-chips" id="chips-eventos" style="display: none;">
+        <button type="button" class="chip-btn active" data-filter="all">Todos los 11 Menús</button>
+        <button type="button" class="chip-btn" data-filter="cortes">Cortes & Parrilladas Gourmet</button>
+        <button type="button" class="chip-btn" data-filter="ahumados">Ahumados Texanos (12 hrs)</button>
+        <button type="button" class="chip-btn" data-filter="hamburguesas">Hamburguesas & Buffets</button>
+        <button type="button" class="chip-btn" data-filter="taquizas">Taquizas al Carbón</button>
+        <button type="button" class="chip-btn" data-filter="mariscos">Mariscos Botaneros</button>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         SECTION 1: MENÚ DE VENTA (Directa)
+         ======================================================================= -->
+    <section id="section-venta" class="menu-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-fire"></i> Menú de Venta Directa</h2>
+          <p class="section-subtitle">Pide para entrega, servicio a domicilio o consumo inmediato. Puedes ordenar paquetes completos o fracciones (1/4, 1/2 y 3/4).</p>
+        </div>
+        <button type="button" class="contact-pill" id="btn-view-original-menu" style="cursor: pointer;">
+          <i class="fa-solid fa-image"></i> Ver Carta Original
+        </button>
+      </div>
+
+      <!-- Interactive Grid -->
+      <div class="menu-grid" id="venta-grid">
+        <!-- Rendered dynamically by js/app.js -->
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 2: MENÚ DE EVENTOS (11 Menús)
+         ======================================================================= -->
+    <section id="section-eventos" class="menu-section" style="display: none;">
+      <!-- Banner Eventos -->
+      <div class="banner-photo-card">
+        <img src="assets/img/Cartel eve.jpg" alt="Todo Asado Los 3 Osos en tus mejores eventos" onerror="this.src='assets/img/cartel eventos.png'">
+        <div class="banner-overlay">
+          <div class="banner-content">
+            <span class="card-badge badge-featured">Servicio Profesional de Banquetes</span>
+            <h3>TODO ASADO EN TUS MEJORES EVENTOS</h3>
+            <p>11 Paquetes diseñados para bodas, graduaciones, cumpleaños, reuniones corporativas y parrilladas familiares con servicio completo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-champagne-glasses"></i> Menús para Eventos & Banquetes</h2>
+          <p class="section-subtitle">Selecciona cualquiera de las 11 opciones para ver sus entradas, cortes, guarniciones y solicitar tu cotización personalizada.</p>
+        </div>
+        <button type="button" class="contact-pill phone" onclick="switchTab('cotizador')" style="cursor: pointer;">
+          <i class="fa-solid fa-calculator"></i> Abrir Cotizador Rápido
+        </button>
+      </div>
+
+      <!-- Interactive Grid for 11 Menus -->
+      <div class="menu-grid" id="eventos-grid">
+        <!-- Rendered dynamically by js/app.js -->
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 3: COTIZADOR INTERACTIVO DE EVENTOS
+         ======================================================================= -->
+    <section id="section-cotizador" class="menu-section" style="display: none;">
+      <div class="calculator-section">
+        <div class="section-header" style="border-bottom-color: rgba(255,255,255,0.1);">
+          <div>
+            <h2 class="section-title"><i class="fa-solid fa-calculator"></i> Calculadora & Cotizador de Eventos</h2>
+            <p class="section-subtitle">Calcula el presupuesto estimado para tu reunión o fiesta y envíalo directamente por WhatsApp para reservar fecha.</p>
+          </div>
+        </div>
+
+        <div class="calc-grid">
+          <!-- Controls Form -->
+          <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="form-group">
+              <label for="calc-menu-select"><i class="fa-solid fa-utensils" style="color: var(--primary);"></i> Elige uno de los 11 Menús:</label>
+              <select id="calc-menu-select" class="form-control">
+                <!-- Options populated by js/app.js -->
+              </select>
+            </div>
+
+            <!-- Variant selector if menu has variants -->
+            <div class="form-group" id="calc-variant-wrapper" style="display: none;">
+              <label for="calc-variant-select"><i class="fa-solid fa-layer-group" style="color: var(--accent-blue);"></i> Variante de Paquete:</label>
+              <select id="calc-variant-select" class="form-control">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="calc-guests"><i class="fa-solid fa-users" style="color: var(--primary);"></i> Número de Invitados / Personas:</label>
+              <input type="number" id="calc-guests" class="form-control" value="50" min="10" max="1000" step="5">
+              <span style="font-size: 0.78rem; color: var(--text-dim);">Recomendado: mínimo 20 personas para servicio de banquete completo con parrilleros.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="calc-phone-select"><i class="fa-brands fa-whatsapp" style="color: #4ade80;"></i> Número de WhatsApp para enviar cotización:</label>
+              <select id="calc-phone-select" class="form-control">
+                <option value="1">444 142 5054 (Línea de Atención 1)</option>
+                <option value="2">444 234 3129 (Línea de Atención 2)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Summary & Send Card -->
+          <div class="calc-summary-card">
+            <span style="text-transform: uppercase; font-size: 0.82rem; letter-spacing: 1px; color: var(--accent-blue); font-weight: 700;">
+              Presupuesto Total Estimado
+            </span>
+            <div class="calc-price-display" id="calc-total-display">
+              $0 <small>MXN</small>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+              *Los precios pueden variar según traslados foráneos o requerimientos de mobiliario adicional.
+            </p>
+
+            <a href="#" id="btn-send-calc-wa" target="_blank" rel="noopener" class="btn-send-quote">
+              <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i> Enviar Cotización por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 4: GENERADOR Y VISOR DE CÓDIGO QR
+         ======================================================================= -->
+    <section id="section-qr" class="menu-section" style="display: none;">
+      <div class="calculator-section" style="text-align: center;">
+        <h2 class="section-title" style="justify-content: center; margin-bottom: 0.5rem;">
+          <i class="fa-solid fa-qrcode"></i> Código QR para Mesas & Mostrador
+        </h2>
+        <p class="section-subtitle" style="max-width: 600px; margin: 0 auto 2rem;">
+          Tus clientes pueden escanear este código QR con la cámara de su teléfono para ver este menú interactivo en segundos, sin descargar ninguna aplicación.
+        </p>
+
+        <div class="qr-preview-box" id="page-qr-canvas">
+          <!-- QR Canvas generated here -->
+        </div>
+
+        <div style="max-width: 480px; margin: 1.5rem auto;">
+          <div class="form-group" style="text-align: left; margin-bottom: 1rem;">
+            <label for="custom-qr-url" style="font-size: 0.85rem; color: var(--text-muted);">
+              Enlace del Menú (Modifícalo si ya tienes tu URL de GitHub Pages):
+            </label>
+            <input type="url" id="custom-qr-url" class="form-control qr-url-input" placeholder="https://tu-usuario.github.io/pagina-los-3-osos/">
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-qr-modal btn-download-qr">
+              <i class="fa-solid fa-download"></i> Descargar Imagen QR (PNG)
+            </button>
+            <button type="button" class="contact-pill btn-copy-link" style="cursor: pointer;">
+              <i class="fa-solid fa-link"></i> Copiar Enlace
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =======================================================================
+       MODAL: POPUP DE CÓDIGO QR
+       ======================================================================= -->
+  <div class="modal-overlay" id="qr-modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button type="button" class="modal-close" aria-label="Cerrar modal">&times;</button>
+      <div style="text-align: center;">
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary-light); font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">
+          <i class="fa-solid fa-qrcode"></i> Menú Digital Los 3 Osos
+        </div>
+        <h3 style="font-size: 1.4rem; color: #fff; margin: 0.35rem 0 0.5rem;">Escanea con tu Celular</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Apunta la cámara para abrir la carta interactiva y cotizar eventos al instante.</p>
+
+        <div class="qr-preview-box" id="modal-qr-canvas">
+          <!-- QR rendered by QRCode.js -->
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.25rem;">
+          <button type="button" class="btn-qr-modal btn-download-qr">
+            <i class="fa-solid fa-download"></i> Descargar PNG
+          </button>
+          <button type="button" class="contact-pill btn-copy-link" style="cursor: pointer;">
+            <i class="fa-solid fa-copy"></i> Copiar URL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL: VISOR DE CARTA ORIGINAL
+       ======================================================================= -->
+  <div class="modal-overlay" id="img-modal" role="dialog" aria-modal="true">
+    <div class="modal-content" style="max-width: 750px; padding: 1.25rem;">
+      <button type="button" class="modal-close" aria-label="Cerrar modal">&times;</button>
+      <h3 style="color: #fff; font-size: 1.25rem; margin-bottom: 0.75rem; text-align: center;">Carta Impresa Original - Menú Venta</h3>
+      <div style="max-height: 75vh; overflow-y: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+        <img src="assets/img/menu venta.png" alt="Carta Impresa Los 3 Osos" style="width: 100%; display: block;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Mobile Bar (Thumb friendly for phones) -->
+  <div class="mobile-floating-bar">
+    <a href="#venta" class="mob-action-btn active" data-tab="venta">
+      <i class="fa-solid fa-utensils"></i>
+      <span>Venta</span>
+    </a>
+    <a href="#eventos" class="mob-action-btn" data-tab="eventos">
+      <i class="fa-solid fa-champagne-glasses"></i>
+      <span>Eventos</span>
+    </a>
+    <a href="#cotizador" class="mob-action-btn" data-tab="cotizador">
+      <i class="fa-solid fa-calculator"></i>
+      <span>Cotizar</span>
+    </a>
+    <a href="https://wa.me/524441425054" target="_blank" rel="noopener" class="mob-action-btn wa-highlight">
+      <i class="fa-brands fa-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+    <a href="#qr" class="mob-action-btn" data-tab="qr">
+      <i class="fa-solid fa-qrcode"></i>
+      <span>QR</span>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <img src="assets/img/Imagen Perfil.jpg" alt="Los 3 Osos" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary);">
+            <div>
+              <h4 style="margin: 0; font-size: 1.1rem;">LOS 3 OSOS</h4>
+              <span style="font-size: 0.78rem; color: var(--accent-blue); text-transform: uppercase; font-weight: 700;">Todo Asado</span>
+            </div>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
+            El sabor inconfundible del asado al carbón y la leña. Banquetes para eventos grandes, parrilladas a domicilio y venta directa para toda ocasión.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Teléfonos & Atención</h4>
+          <ul class="footer-links">
+            <li>
+              <a href="tel:4441425054"><i class="fa-solid fa-phone" style="color: var(--accent-blue);"></i> 444 142 5054</a>
+            </li>
+            <li>
+              <a href="tel:4442343129"><i class="fa-solid fa-phone" style="color: var(--accent-blue);"></i> 444 234 3129</a>
+            </li>
+            <li>
+              <a href="https://wa.me/524441425054" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" style="color: #4ade80;"></i> WhatsApp Directo Línea 1</a>
+            </li>
+            <li>
+              <a href="https://wa.me/524442343129" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" style="color: #4ade80;"></i> WhatsApp Directo Línea 2</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Redes Sociales Oficiales</h4>
+          <ul class="footer-links">
+            <li>
+              <a href="https://www.facebook.com/search/top?q=Todo_asado%20Lostresosos" target="_blank" rel="noopener">
+                <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i> Facebook: Todo_asado Lostresosos
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/todoasado_los3osos/" target="_blank" rel="noopener">
+                <i class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram: @todoasado_los3osos
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Todo Asado Los 3 Osos · Todos los derechos reservados · Menú Digital Interactivo para GitHub Pages</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- QRCode.js CDN for client-side QR generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Main JavaScript App -->
+  <script src="js/app.js"></script>
+</body>
+</html>

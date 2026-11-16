@@ -1,0 +1,1027 @@
+/**
+ * TODO ASADO LOS 3 OSOS - Interactive Digital Menu Application
+ * Handles Tabs, Dynamic Rendering, Live Search, Event Quote Calculator & QR Generator
+ */
+
+// Contact Information
+const CONTACT_CONFIG = {
+  phone1: "4441425054",
+  phone2: "4442343129",
+  whatsappBase1: "https://wa.me/524441425054",
+  whatsappBase2: "https://wa.me/524442343129",
+  facebook: "https://www.facebook.com/search/top?q=Todo_asado%20Lostresosos",
+  instagram: "https://www.instagram.com/todoasado_los3osos/"
+};
+
+// 1. DATA: MENÚ DE VENTA (Directa / Regular)
+const MENU_VENTA_DATA = [
+  {
+    id: "v-arrachera",
+    category: "paquetes",
+    name: "Paquete Arrachera de Res",
+    price: 480,
+    priceNote: "Se puede pedir 1/4, 1/2 o 3/4",
+    badge: "Más Vendido",
+    badgeType: "featured",
+    description: "Arrachera de res marinada y asada al punto, acompañada de papa asada, salchichón, chorizo argentino, cebolla cambray, chistorra, limón y salsa de molcajete.",
+    highlights: ["Papa Asada", "Salchichón", "Chorizo Argentino", "Cebolla Cambray", "Chistorra", "Salsa Molcajete"]
+  },
+  {
+    id: "v-costilla",
+    category: "paquetes",
+    name: "Paquete Costilla BBQ",
+    price: 430,
+    priceNote: "Se puede pedir 1/4, 1/2 o 3/4",
+    badge: "Especialidad",
+    badgeType: "chef",
+    description: "Suave y jugosa costilla de puerco bañada en nuestra salsa BBQ artesanal, acompañada de papa asada, salchichón y salsa de molcajete.",
+    highlights: ["Costilla Bañada en BBQ", "Papa Asada", "Salchichón", "Salsa de Molcajete"]
+  },
+  {
+    id: "v-discada",
+    category: "paquetes",
+    name: "Paquete Discada Norteña",
+    price: 400,
+    priceNote: "Se puede pedir 1/4, 1/2 o 3/4",
+    badge: "Sabor Norteño",
+    badgeType: "budget",
+    description: "Auténtica Discada Norteña con la mejor combinación de carnes y vegetales al disco, acompañada de papa asada, limón y salsa de molcajete.",
+    highlights: ["Mix de Carnes y Vegetales", "Papa Asada", "Limón", "Salsa de Molcajete"]
+  },
+  {
+    id: "v-3osos",
+    category: "paquetes",
+    name: "Paquete 3 Osos (Especial)",
+    price: 480,
+    priceNote: "Se puede pedir 1/4, 1/2 o 3/4",
+    badge: "Firma de la Casa",
+    badgeType: "featured",
+    description: "El trío estelar: combinación de Arrachera, Costilla BBQ y Discada Norteña. Servido con papa asada, salchichón, chorizo argentino, cebolla cambray, chistorra, limón y salsa de molcajete.",
+    highlights: ["Arrachera + Costilla BBQ + Discada", "Chorizo Argentino & Chistorra", "Papa Asada & Guarniciones"]
+  },
+  {
+    id: "v-chamorro",
+    category: "paquetes",
+    name: "Chamorro de Oso",
+    price: 220,
+    priceNote: "Pieza completa",
+    badge: "Recomendado",
+    badgeType: "chef",
+    description: "Pieza entera de Chamorro suave y tierno, bañado en salsa BBQ y Miel, acompañada de papa asada, salchichón, chistorra, limón y salsa de molcajete.",
+    highlights: ["Glaseado BBQ y Miel", "Papa Asada", "Salchichón & Chistorra", "Salsa de Molcajete"]
+  },
+  {
+    id: "v-alitas",
+    category: "antojos",
+    name: "Alitas de Pollo (10 pz)",
+    price: 100,
+    priceNote: "10 piezas",
+    badge: "Para Botanear",
+    badgeType: "budget",
+    description: "10 deliciosas piezas de alitas doradas. Elige tu salsa favorita: BBQ tradicional, Mango Habanero picante o Búfalo clásico.",
+    highlights: ["Salsa BBQ", "Salsa Mango Habanero", "Salsa Búfalo"]
+  },
+  {
+    id: "v-burger",
+    category: "antojos",
+    name: "Hamburguesa Casera 250g",
+    price: 100,
+    priceNote: "Individual",
+    badge: "100% Casera",
+    badgeType: "featured",
+    description: "250g de carne casera selecta a la parrilla, con piña asada, queso, vegetales frescos (lechuga, jitomate, cebolla) y aderezos especiales.",
+    highlights: ["250g Carne Asada", "Piña Asada & Queso", "Vegetales Frescos & Aderezos"]
+  },
+  {
+    id: "v-tortas",
+    category: "antojos",
+    name: "Tortas Especiales",
+    price: 60,
+    priceNote: "Por pieza",
+    badge: "Antojo Rápido",
+    badgeType: "budget",
+    description: "Torta grande a elegir entre Arrachera marinada o Discada Norteña, servida con lechuga, cebolla, jitomate y aderezos.",
+    highlights: ["A elegir: Arrachera o Discada", "Vegetales Frescos"]
+  },
+  {
+    id: "v-tacos",
+    category: "antojos",
+    name: "Tacos al Carbón",
+    price: 20,
+    priceNote: "Por pieza",
+    badge: "Al Carbón",
+    badgeType: "budget",
+    description: "Taco en tortilla caliente con la carne de tu elección: Arrachera, Discada Norteña o Costilla BBQ deshebrada.",
+    highlights: ["Arrachera", "Discada", "Costilla"]
+  },
+  {
+    id: "v-papa-asada",
+    category: "complementos",
+    name: "Orden de Papa Asada",
+    price: 40,
+    priceNote: "Por orden",
+    badge: "Acompañamiento",
+    badgeType: "budget",
+    description: "Papa asada al carbón preparada con mantequilla, sal y condimentos especiales de la casa.",
+    highlights: ["Mantequilla y sazón especial"]
+  },
+  {
+    id: "v-papa-carne",
+    category: "complementos",
+    name: "Orden de Papa con Carne",
+    price: 60,
+    priceNote: "Por orden",
+    badge: "Favorito",
+    badgeType: "featured",
+    description: "Papa asada al carbón rellena y coronada con abundante carne asada, mantequilla y aderezos.",
+    highlights: ["Cargada con carne asada"]
+  }
+];
+
+// 2. DATA: MENÚ DE EVENTOS (11 Menús)
+const MENU_EVENTOS_DATA = [
+  {
+    id: "e-1",
+    num: "1",
+    name: "Menú Hamburguesas Parrilleras",
+    category: "hamburguesas",
+    priceDisplay: "$110 – $230",
+    unit: "por persona",
+    basePrice: 110,
+    badge: "Parrillada Casual",
+    badgeType: "featured",
+    description: "Hamburguesas estilo parrillero con carne a las brasas, preparadas al momento para tus invitados con 3 opciones de paquete:",
+    variants: [
+      { name: "Hamburguesa parrillera sola", price: 110 },
+      { name: "Hamburguesa parrillera con papas", price: 160 },
+      { name: "Hamburguesa parrillera + Hot-dog + Papas", price: 230 }
+    ],
+    inclusions: [
+      { title: "Servicio al momento", items: ["Carne asada a la parrilla", "Pan artesanal y aderezos", "Vegetales y complementos"] }
+    ]
+  },
+  {
+    id: "e-2",
+    num: "2",
+    name: "Menú Hamburguesas Chicas (Kids / Eventos)",
+    category: "hamburguesas",
+    priceDisplay: "$70 – $160",
+    unit: "por persona",
+    basePrice: 70,
+    badge: "Económico & Cumpleaños",
+    badgeType: "budget",
+    description: "Opción ideal para fiestas infantiles, reuniones juveniles o paquetes con mayor rendimiento.",
+    variants: [
+      { name: "Hamburguesas chicas solas", price: 70 },
+      { name: "Hamburguesas chicas con papas", price: 110 },
+      { name: "Hamburguesas chicas + Hot-dog + Papas", price: 160 }
+    ],
+    inclusions: [
+      { title: "Servicio", items: ["Hamburguesas tamaño individual", "Papas fritas crujientes (según paquete)", "Hot-dog parrillero (según paquete)"] }
+    ]
+  },
+  {
+    id: "e-3",
+    num: "3",
+    name: "Banquete Picaña Rellena & Lechón a la Estaca",
+    category: "cortes",
+    priceDisplay: "$580",
+    unit: "por persona",
+    basePrice: 580,
+    badge: "Experiencia Gourmet",
+    badgeType: "chef",
+    description: "El banquete más exclusivo. La carne se sirve al centro de la mesa en parrillas calientes para conservar su temperatura y jugosidad.",
+    inclusions: [
+      {
+        title: "Entrada",
+        items: ["Ensalada de frutos rojos y mix de nueces", "Sopes artesanales"]
+      },
+      {
+        title: "Plato Fuerte (Al centro en parrillas calientes)",
+        items: ["Picaña rellena gourmet", "Lechón tradicional a la estaca"]
+      },
+      {
+        title: "Acompañamientos",
+        items: ["Guacamole fresco", "Tortillas calientes", "Salsa molcajeteada y salsa piña habanero", "Chistorra y mix de chorizo", "Quesadillas al comal", "Frijoles charros de la casa"]
+      }
+    ]
+  },
+  {
+    id: "e-4",
+    num: "4",
+    name: "Presupuesto Texano Smokehouse",
+    category: "ahumados",
+    priceDisplay: "$530",
+    unit: "por persona",
+    basePrice: 530,
+    badge: "12 Horas de Ahumado",
+    badgeType: "featured",
+    description: "Auténtico BBQ estilo Texas ahumado lentamente con leña seleccionada durante 12 horas ininterrumpidas.",
+    inclusions: [
+      {
+        title: "Carnes Ahumadas Premium",
+        items: ["Brisket ahumado (12 hrs a fuego lento)", "Pulled Pork ahumado (12 hrs)", "Costilla BBQ glaseada"]
+      },
+      {
+        title: "Guarniciones Incluidas",
+        items: ["Salsa BBQ de la casa", "Puré de papa cremoso", "Elote amarillo dulce", "Papas a la francesa", "Cuernitos horneados"]
+      },
+      {
+        title: "Postre",
+        items: ["Pan de elote artesanal"]
+      }
+    ]
+  },
+  {
+    id: "e-5",
+    num: "5",
+    name: "Presupuesto Bufet Hamburguesas, Tortas & Alitas",
+    category: "hamburguesas",
+    priceDisplay: "$190",
+    unit: "por persona",
+    basePrice: 190,
+    badge: "Buffet Todo Incluido",
+    badgeType: "budget",
+    description: "Variedad insuperable para que tus invitados disfruten a su gusto: hamburguesas al carbón, tortas norteñas y alitas en salsas.",
+    inclusions: [
+      {
+        title: "Platillos Principales",
+        items: [
+          "Tortas de Arrachera con vegetales frescos",
+          "Tortas de Discada Norteña",
+          "Hamburguesas al carbón (vegetales, piña asada, queso, aderezos)",
+          "Alitas en 3 salsas (BBQ, Búfalo y Mango Habanero)"
+        ]
+      },
+      {
+        title: "Acompañantes",
+        items: ["Papa asada al carbón", "Salsa de molcajete", "Salchichón", "Chistorra dorada", "Cebolla caramelizada"]
+      }
+    ]
+  },
+  {
+    id: "e-6",
+    num: "6",
+    name: "Parrillada Mexicana Tradicional",
+    category: "cortes",
+    priceDisplay: "$390",
+    unit: "por persona",
+    basePrice: 390,
+    badge: "Clásico Mexicano",
+    badgeType: "featured",
+    description: "Tres de los mejores cortes asados a las brasas de carbón acompañados del auténtico sabor norteño y queso fundido.",
+    inclusions: [
+      {
+        title: "Entrada & Postre",
+        items: ["Entrada: Empanada argentina dorada", "Postre de la casa"]
+      },
+      {
+        title: "Cortes al Carbón",
+        items: ["Arrachera de res marinada", "Aguja Norteña", "T-Bone a la parrilla"]
+      },
+      {
+        title: "Acompañantes",
+        items: ["Salchichón parrillero", "Chorizo normal al grill", "Cebollitas asadas", "Salsa de molcajete", "Queso fundido", "Guacamole fresco", "Vegetales asados al grill"]
+      }
+    ]
+  },
+  {
+    id: "e-7",
+    num: "7",
+    name: "Cotización Rib Eye Steakhouse",
+    category: "cortes",
+    priceDisplay: "$380",
+    unit: "por persona",
+    basePrice: 380,
+    badge: "Corte Selecto",
+    badgeType: "chef",
+    description: "Un servicio distinguido con jugoso corte de Rib Eye servido individualmente con tortillas artesanales de masa azul y verde.",
+    inclusions: [
+      {
+        title: "Entrada",
+        items: ["Ensalada fresca con mix de nueces selectas", "Sope especial de res con salsa molcajete"]
+      },
+      {
+        title: "Plato Fuerte",
+        items: ["Corte de Rib Eye individual a las brasas", "Elote amarillo a la mantequilla", "Papa asada rellena"]
+      },
+      {
+        title: "Acompañantes & Postre",
+        items: ["Guacamole recién hecho", "Vegetales asados", "Salsa molcajeteada y salsa piña habanero", "Tortillas artesanales de maíz azul y verde", "Postre incluido"]
+      }
+    ]
+  },
+  {
+    id: "e-8",
+    num: "8",
+    name: "Espadas Brasileñas al Carbón",
+    category: "cortes",
+    priceDisplay: "$410",
+    unit: "por persona",
+    basePrice: 410,
+    badge: "Estilo Rodizio",
+    badgeType: "featured",
+    description: "Desfile continuo de espadas con 9 especialidades asadas a fuego vivo directamente en tu evento.",
+    inclusions: [
+      {
+        title: "Entrada",
+        items: ["Empanadas Argentinas con ensalada fresca de frutos rojos"]
+      },
+      {
+        title: "Espadas Continuas (9 Especialidades)",
+        items: [
+          "Picaña de res a la espada",
+          "Chistorra asada",
+          "Chorizo parrillero",
+          "Pollo bañado en BBQ",
+          "Piña asada con canela y azúcar",
+          "Pan de ajo artesanal",
+          "Banderilla parrillera",
+          "Lomo a la mostaza",
+          "Alitas doradas"
+        ]
+      }
+    ]
+  },
+  {
+    id: "e-9",
+    num: "9",
+    name: "Barra de Mariscos Frescos",
+    category: "mariscos",
+    priceDisplay: "$240",
+    unit: "por persona",
+    basePrice: 240,
+    badge: "Fresco del Mar",
+    badgeType: "budget",
+    description: "Una estación fresca y botanera perfecta para eventos de tarde o maridajes especiales.",
+    inclusions: [
+      {
+        title: "Especialidades de Mariscos",
+        items: ["Aguachile Verde botanero", "Aguachile Negro especial", "Ceviche con mayonesa", "Ceviche Natural de pescado"]
+      },
+      {
+        title: "Complementos & Servicio",
+        items: ["Tostadas de maíz crujientes", "Galletas saladas", "Limones frescos y salsas botaneras", "Platos y servilletas incluidas"]
+      }
+    ]
+  },
+  {
+    id: "e-10",
+    num: "10",
+    name: "Presupuesto Taquiza Tradicional",
+    category: "taquizas",
+    priceDisplay: "$120",
+    unit: "por persona",
+    basePrice: 120,
+    badge: "Taquiza Popular",
+    badgeType: "budget",
+    description: "El inigualable sabor de los tacos de trompo y comal servidos calientitos en tu fiesta, con todos los complementos.",
+    inclusions: [
+      {
+        title: "5 Variedades de Tacos",
+        items: ["Tacos de Bistec", "Tacos de Pastor adobado", "Tacos de Chorizo", "Tacos de Tripitas doradas", "Tacos Combinados"]
+      },
+      {
+        title: "Salsas & Guarniciones Incluidas",
+        items: [
+          "Salsa verde molcajeteada",
+          "Salsa roja molcajeteada",
+          "Cebolla caramelizada al carbón",
+          "Chiles güeros asados",
+          "Salsa piña con habanero",
+          "Nopales asados",
+          "Cebolla picada, cilantro y limones"
+        ]
+      },
+      {
+        title: "Servicio",
+        items: ["Desechables de calidad y servilletas incluidas"]
+      }
+    ]
+  },
+  {
+    id: "e-11",
+    num: "11",
+    name: "Presupuesto Taquiza con Quesadillas",
+    category: "taquizas",
+    priceDisplay: "$140",
+    unit: "por persona",
+    basePrice: 140,
+    badge: "Taquiza con Quesadillas",
+    badgeType: "featured",
+    description: "Nuestra taquiza más completa con tacos variados más ricas quesadillas de queso derretido en comal.",
+    inclusions: [
+      {
+        title: "Variedades de Tacos y Quesadillas",
+        items: [
+          "Tacos de Bistec",
+          "Tacos de Pastor adobado",
+          "Tacos de Chorizo",
+          "Tacos de Salchichón",
+          "Tacos Combinados",
+          "Quesadillas calientitas al comal con queso fundido"
+        ]
+      },
+      {
+        title: "Salsas & Guarniciones",
+        items: [
+          "Salsa verde molcajeteada",
+          "Salsa roja molcajeteada",
+          "Cebolla caramelizada al carbón",
+          "Chiles güeros asados",
+          "Salsa piña habanero",
+          "Nopales asados",
+          "Limones, cilantro y cebolla picada"
+        ]
+      },
+      {
+        title: "Servicio",
+        items: ["Desechables y servilletas incluidas"]
+      }
+    ]
+  }
+];
+
+// App State
+let currentTab = 'venta'; // 'venta' | 'eventos' | 'cotizador' | 'qr'
+let activeFilter = 'all';
+let searchQuery = '';
+
+// DOM Elements
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  renderVentaMenu();
+  renderEventosMenu();
+  populateCalculatorOptions();
+  initCalculator();
+  initSearchAndFilters();
+  initModals();
+  initQRGenerator();
+});
+
+/* ==========================================================================
+   TABS NAVIGATION
+   ========================================================================== */
+function initTabs() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const sections = {
+    venta: document.getElementById('section-venta'),
+    eventos: document.getElementById('section-eventos'),
+    cotizador: document.getElementById('section-cotizador'),
+    qr: document.getElementById('section-qr')
+  };
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-tab');
+      switchTab(targetTab);
+    });
+  });
+
+  // Mobile Bottom Bar Navigation
+  const mobBtns = document.querySelectorAll('.mob-action-btn[data-tab]');
+  mobBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetTab = btn.getAttribute('data-tab');
+      switchTab(targetTab);
+      window.scrollTo({ top: 380, behavior: 'smooth' });
+    });
+  });
+}
+
+function switchTab(tabId) {
+  currentTab = tabId;
+
+  // Update nav buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+  });
+
+  document.querySelectorAll('.mob-action-btn[data-tab]').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+  });
+
+  // Toggle sections
+  const sections = ['venta', 'eventos', 'cotizador', 'qr'];
+  sections.forEach(id => {
+    const el = document.getElementById(`section-${id}`);
+    if (el) {
+      if (id === tabId) {
+        el.style.display = 'block';
+        el.style.animation = 'fadeIn 0.3s ease';
+      } else {
+        el.style.display = 'none';
+      }
+    }
+  });
+
+  // Reset search input placeholder based on tab
+  const searchInput = document.getElementById('menu-search');
+  if (searchInput) {
+    if (tabId === 'eventos') {
+      searchInput.placeholder = 'Buscar en los 11 menús de eventos (ej. picaña, taquiza, rib eye, buffet)...';
+    } else {
+      searchInput.placeholder = 'Buscar platillo, paquete o antojo (ej. arrachera, alitas, hamburguesa)...';
+    }
+  }
+
+  // Update filter chips display
+  const chipsVenta = document.getElementById('chips-venta');
+  const chipsEventos = document.getElementById('chips-eventos');
+  if (chipsVenta && chipsEventos) {
+    chipsVenta.style.display = tabId === 'venta' ? 'flex' : 'none';
+    chipsEventos.style.display = tabId === 'eventos' ? 'flex' : 'none';
+  }
+}
+
+/* ==========================================================================
+   RENDER MENÚ DE VENTA
+   ========================================================================== */
+function renderVentaMenu() {
+  const container = document.getElementById('venta-grid');
+  if (!container) return;
+
+  const filtered = MENU_VENTA_DATA.filter(item => {
+    const matchesCategory = activeFilter === 'all' || item.category === activeFilter;
+    const matchesSearch = !searchQuery || 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.highlights.some(h => h.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <i class="fa-solid fa-utensils" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; display: block;"></i>
+        <h4 style="color: #fff; margin-bottom: 0.5rem;">No se encontraron platillos</h4>
+        <p>Intenta con otra palabra clave como "arrachera", "alitas" o limpia el buscador.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => {
+    const badgeClass = item.badgeType === 'featured' ? 'badge-featured' : 
+                       item.badgeType === 'chef' ? 'badge-chef' : 'badge-budget';
+    
+    const waText = encodeURIComponent(`¡Hola Todo Asado Los 3 Osos! Me gustaría pedir: ${item.name} ($${item.price} MXN). ¿Tienen disponible para entrega/pedido?`);
+    const waLink = `${CONTACT_CONFIG.whatsappBase1}?text=${waText}`;
+
+    return `
+      <div class="menu-card" data-category="${item.category}">
+        <div>
+          <span class="card-badge ${badgeClass}">
+            <i class="fa-solid fa-fire-flame-curved"></i> ${item.badge}
+          </span>
+          <div class="card-header-row">
+            <h3 class="item-name">${item.name}</h3>
+            <div class="item-price">
+              $${item.price}
+              <small>${item.priceNote}</small>
+            </div>
+          </div>
+          <p class="item-desc">${item.description}</p>
+          
+          <div class="event-details" style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.75rem;">
+            <div class="detail-label" style="font-size: 0.75rem;">
+              <i class="fa-solid fa-circle-check" style="color: var(--accent-blue);"></i> Incluye / Guarniciones
+            </div>
+            <ul class="detail-list">
+              ${item.highlights.map(h => `<li><i class="fa-solid fa-check"></i> ${h}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-actions" style="margin-top: 1rem;">
+          <a href="${waLink}" target="_blank" rel="noopener" class="btn-order-wa" title="Pedir este platillo por WhatsApp">
+            <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> Pedir por WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ==========================================================================
+   RENDER MENÚ DE EVENTOS (11 MENÚS)
+   ========================================================================== */
+function renderEventosMenu() {
+  const container = document.getElementById('eventos-grid');
+  if (!container) return;
+
+  const filtered = MENU_EVENTOS_DATA.filter(item => {
+    const matchesCategory = activeFilter === 'all' || item.category === activeFilter;
+    const matchesSearch = !searchQuery || 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.inclusions?.some(inc => inc.items.some(i => i.toLowerCase().includes(searchQuery.toLowerCase())));
+    return matchesCategory && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <i class="fa-solid fa-calendar-days" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; display: block;"></i>
+        <h4 style="color: #fff; margin-bottom: 0.5rem;">No se encontraron menús de eventos</h4>
+        <p>Prueba buscando "picaña", "taquiza", "hamburguesa" o selecciona otra categoría.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => {
+    const badgeClass = item.badgeType === 'featured' ? 'badge-featured' : 
+                       item.badgeType === 'chef' ? 'badge-chef' : 'badge-budget';
+    
+    const waText = encodeURIComponent(`¡Hola Todo Asado Los 3 Osos! Me interesa cotizar el Menú para Eventos: "${item.name}" (${item.priceDisplay} ${item.unit}). Me gustaría recibir información de disponibilidad para mi evento.`);
+    const waLink = `${CONTACT_CONFIG.whatsappBase1}?text=${waText}`;
+
+    // Variants HTML if any (e.g. burgers)
+    let variantsHtml = '';
+    if (item.variants && item.variants.length > 0) {
+      variantsHtml = `
+        <div class="variants-table">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 700; margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-layer-group"></i> Opciones de presupuesto:
+          </div>
+          ${item.variants.map(v => `
+            <div class="variant-row">
+              <span class="variant-name">${v.name}</span>
+              <span class="variant-price">$${v.price} <small style="font-size: 0.7rem; color: #94a3b8;">c/u</small></span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Inclusions HTML
+    let inclusionsHtml = '';
+    if (item.inclusions && item.inclusions.length > 0) {
+      inclusionsHtml = `
+        <div class="event-details">
+          ${item.inclusions.map(sec => `
+            <div class="detail-block">
+              <div class="detail-label">
+                <i class="fa-solid fa-fire" style="color: var(--primary);"></i> ${sec.title}
+              </div>
+              <ul class="detail-list">
+                ${sec.items.map(it => `<li><i class="fa-solid fa-check"></i> ${it}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="menu-card" data-category="${item.category}">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="card-badge ${badgeClass}">
+              <i class="fa-solid fa-utensils"></i> Menú #${item.num} · ${item.badge}
+            </span>
+          </div>
+          
+          <div class="card-header-row">
+            <h3 class="item-name">${item.name}</h3>
+            <div class="item-price">
+              ${item.priceDisplay}
+              <small>${item.unit}</small>
+            </div>
+          </div>
+
+          <p class="item-desc">${item.description}</p>
+          ${variantsHtml}
+          ${inclusionsHtml}
+        </div>
+
+        <div class="card-actions" style="margin-top: 1.25rem;">
+          <a href="${waLink}" target="_blank" rel="noopener" class="btn-order-wa" title="Cotizar este menú por WhatsApp">
+            <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> Cotizar Menú #${item.num}
+          </a>
+          <button type="button" class="btn-calc-quote" onclick="selectInCalculator('${item.id}')" title="Calcular para mis invitados">
+            <i class="fa-solid fa-calculator"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ==========================================================================
+   INTERACTIVE EVENT QUOTE CALCULATOR
+   ========================================================================== */
+function populateCalculatorOptions() {
+  const select = document.getElementById('calc-menu-select');
+  if (!select) return;
+
+  select.innerHTML = MENU_EVENTOS_DATA.map(item => {
+    return `<option value="${item.id}">${item.num}. ${item.name} (${item.priceDisplay} ${item.unit})</option>`;
+  }).join('');
+}
+
+function initCalculator() {
+  const select = document.getElementById('calc-menu-select');
+  const guestsInput = document.getElementById('calc-guests');
+  const variantWrapper = document.getElementById('calc-variant-wrapper');
+  const variantSelect = document.getElementById('calc-variant-select');
+  const phoneSelect = document.getElementById('calc-phone-select');
+  const resultDisplay = document.getElementById('calc-total-display');
+  const sendWaBtn = document.getElementById('btn-send-calc-wa');
+
+  if (!select || !guestsInput) return;
+
+  function updateCalculator() {
+    const selectedId = select.value;
+    const menuObj = MENU_EVENTOS_DATA.find(m => m.id === selectedId);
+    if (!menuObj) return;
+
+    let pricePerUnit = menuObj.basePrice;
+
+    // Handle variant selection if available
+    if (menuObj.variants && menuObj.variants.length > 0) {
+      if (variantWrapper) variantWrapper.style.display = 'block';
+      if (variantSelect) {
+        // If variants not yet built for this menu
+        if (variantSelect.getAttribute('data-menu-id') !== selectedId) {
+          variantSelect.setAttribute('data-menu-id', selectedId);
+          variantSelect.innerHTML = menuObj.variants.map((v, i) => `
+            <option value="${v.price}">${v.name} ($${v.price})</option>
+          `).join('');
+        }
+        pricePerUnit = parseFloat(variantSelect.value) || menuObj.basePrice;
+      }
+    } else {
+      if (variantWrapper) variantWrapper.style.display = 'none';
+    }
+
+    const guests = parseInt(guestsInput.value, 10) || 1;
+    const total = pricePerUnit * guests;
+
+    if (resultDisplay) {
+      resultDisplay.innerHTML = `$${total.toLocaleString('es-MX')} <small>MXN</small>`;
+    }
+
+    // Build WhatsApp message
+    const targetPhone = phoneSelect && phoneSelect.value === '2' ? CONTACT_CONFIG.phone2 : CONTACT_CONFIG.phone1;
+    const targetWaBase = phoneSelect && phoneSelect.value === '2' ? CONTACT_CONFIG.whatsappBase2 : CONTACT_CONFIG.whatsappBase1;
+
+    let variantText = '';
+    if (menuObj.variants && variantSelect) {
+      const selectedOptionText = variantSelect.options[variantSelect.selectedIndex]?.text || '';
+      variantText = `\n- Modalidad: ${selectedOptionText}`;
+    }
+
+    const message = `¡Hola Todo Asado Los 3 Osos! Me interesa cotizar un evento con los siguientes detalles:\n\n` +
+      `🔥 Menú #${menuObj.num}: ${menuObj.name}\n` +
+      `👥 Personas / Invitados: ${guests} personas\n` +
+      `💵 Costo Estimado: $${total.toLocaleString('es-MX')} MXN ($${pricePerUnit} por persona)` +
+      `${variantText}\n\n` +
+      `¿Tienen disponibilidad de fecha y qué incluye el servicio de parrilleros? ¡Gracias!`;
+
+    if (sendWaBtn) {
+      sendWaBtn.href = `${targetWaBase}?text=${encodeURIComponent(message)}`;
+    }
+  }
+
+  select.addEventListener('change', () => {
+    // Reset variant select menu tracking
+    if (variantSelect) variantSelect.removeAttribute('data-menu-id');
+    updateCalculator();
+  });
+
+  guestsInput.addEventListener('input', updateCalculator);
+  if (variantSelect) variantSelect.addEventListener('change', updateCalculator);
+  if (phoneSelect) phoneSelect.addEventListener('change', updateCalculator);
+
+  // Initial calculation
+  updateCalculator();
+}
+
+// Global helper to switch to calculator from any event card
+window.selectInCalculator = function(menuId) {
+  switchTab('cotizador');
+  const select = document.getElementById('calc-menu-select');
+  if (select) {
+    select.value = menuId;
+    const variantSelect = document.getElementById('calc-variant-select');
+    if (variantSelect) variantSelect.removeAttribute('data-menu-id');
+    select.dispatchEvent(new Event('change'));
+  }
+  const calcSection = document.getElementById('section-cotizador');
+  if (calcSection) {
+    calcSection.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+/* ==========================================================================
+   SEARCH & FILTERS
+   ========================================================================== */
+function initSearchAndFilters() {
+  const searchInput = document.getElementById('menu-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      if (currentTab === 'venta') {
+        renderVentaMenu();
+      } else if (currentTab === 'eventos') {
+        renderEventosMenu();
+      }
+    });
+  }
+
+  // Filter Chips for Venta
+  const ventaChips = document.querySelectorAll('#chips-venta .chip-btn');
+  ventaChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      ventaChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeFilter = chip.getAttribute('data-filter');
+      renderVentaMenu();
+    });
+  });
+
+  // Filter Chips for Eventos
+  const eventosChips = document.querySelectorAll('#chips-eventos .chip-btn');
+  eventosChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      eventosChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeFilter = chip.getAttribute('data-filter');
+      renderEventosMenu();
+    });
+  });
+}
+
+/* ==========================================================================
+   QR CODE GENERATOR & SHARING
+   ========================================================================== */
+function initQRGenerator() {
+  const qrContainers = [
+    document.getElementById('modal-qr-canvas'),
+    document.getElementById('page-qr-canvas')
+  ];
+
+  let currentUrl = window.location.href;
+  if (currentUrl.startsWith('file://')) {
+    currentUrl = "https://tu-usuario.github.io/pagina-los-3-osos/";
+  }
+
+  // Set input value
+  const qrUrlInputs = document.querySelectorAll('.qr-url-input');
+  qrUrlInputs.forEach(input => {
+    input.value = currentUrl;
+    input.addEventListener('change', () => {
+      generateQRCodes(input.value.trim());
+    });
+  });
+
+  generateQRCodes(currentUrl);
+
+  // Download QR code buttons
+  document.querySelectorAll('.btn-download-qr').forEach(btn => {
+    btn.addEventListener('click', () => {
+      downloadQRCode();
+    });
+  });
+
+  // Copy link buttons
+  document.querySelectorAll('.btn-copy-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.querySelector('.qr-url-input');
+      const textToCopy = input ? input.value : currentUrl;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast("¡Enlace copiado al portapapeles!");
+      });
+    });
+  });
+}
+
+function generateQRCodes(url) {
+  if (!url || typeof QRCode === 'undefined') return;
+
+  const targets = [
+    { el: document.getElementById('modal-qr-canvas'), size: 220 },
+    { el: document.getElementById('page-qr-canvas'), size: 240 }
+  ];
+
+  targets.forEach(({ el, size }) => {
+    if (!el) return;
+    el.innerHTML = '';
+    new QRCode(el, {
+      text: url,
+      width: size,
+      height: size,
+      colorDark: "#111111",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  });
+}
+
+function downloadQRCode() {
+  const container = document.getElementById('modal-qr-canvas') || document.getElementById('page-qr-canvas');
+  if (!container) return;
+
+  const img = container.querySelector('img');
+  const canvas = container.querySelector('canvas');
+  let dataUrl = '';
+
+  if (img && img.src) {
+    dataUrl = img.src;
+  } else if (canvas) {
+    dataUrl = canvas.toDataURL("image/png");
+  }
+
+  if (dataUrl) {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'QR-Menu-Los-3-Osos.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast("¡Código QR descargado con éxito!");
+  } else {
+    showToast("Generando QR... por favor espera un instante.");
+  }
+}
+
+/* ==========================================================================
+   MODALS (QR & Menu Image Viewer)
+   ========================================================================== */
+function initModals() {
+  const qrModal = document.getElementById('qr-modal');
+  const imgModal = document.getElementById('img-modal');
+
+  // Open QR modal button
+  const openQrBtn = document.getElementById('btn-open-qr-modal');
+  if (openQrBtn && qrModal) {
+    openQrBtn.addEventListener('click', () => {
+      qrModal.classList.add('active');
+    });
+  }
+
+  // Open Image modal button
+  const openImgBtn = document.getElementById('btn-view-original-menu');
+  if (openImgBtn && imgModal) {
+    openImgBtn.addEventListener('click', () => {
+      imgModal.classList.add('active');
+    });
+  }
+
+  // Close modals
+  document.querySelectorAll('.modal-close, .modal-overlay').forEach(closer => {
+    closer.addEventListener('click', (e) => {
+      if (e.target === closer || closer.classList.contains('modal-close')) {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+      }
+    });
+  });
+
+  // Escape key closes modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+    }
+  });
+}
+
+/* Simple Toast helper */
+function showToast(message) {
+  let toast = document.getElementById('custom-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'custom-toast';
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      border: 1px solid var(--primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      z-index: 2000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 15px rgba(194,89,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    `;
+    document.body.appendChild(toast);
+  }
+
+  toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #4ade80;"></i> ${message}`;
+  toast.style.opacity = '1';
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+  }, 2800);
+}
