@@ -298,22 +298,23 @@ body {
 .sticky-nav-wrapper {
   position: sticky;
   top: 0;
-  z-index: 90;
-  background: rgba(15, 16, 19, 0.92);
+  z-index: 100;
+  background: rgba(15, 16, 19, 0.95);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-color);
-  padding: 0.85rem 0;
+  padding: 0.75rem 0;
   margin-bottom: 2rem;
 }
 
 .nav-tabs {
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   overflow-x: auto;
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav-tabs::-webkit-scrollbar {
@@ -323,16 +324,17 @@ body {
 .tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.75rem 1.4rem;
+  gap: 0.5rem;
+  padding: 0.7rem 1.25rem;
   border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
   background: var(--bg-card);
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all var(--transition-fast);
 }
 
@@ -1001,23 +1003,30 @@ body {
 
 /* Floating Bottom Bar for Mobile Quick Actions */
 .mobile-floating-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(18, 19, 24, 0.96);
-  backdrop-filter: blur(12px);
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #111216 !important;
+  background: rgba(17, 18, 22, 0.98) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--border-primary);
-  display: flex;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
   justify-content: space-around;
-  padding: 0.6rem 1rem;
-  z-index: 95;
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+  align-items: center;
+  padding: 0.65rem 0.5rem;
+  z-index: 99999 !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.7);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .mobile-floating-bar {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -1046,10 +1055,10 @@ body {
   color: #4ade80;
 }
 
-/* Responsive Tweaks */
-@media (max-width: 640px) {
+/* Responsive Tweaks for Mobile & Tablet */
+@media (max-width: 899px) {
   body {
-    padding-bottom: 60px; /* Space for mobile bar */
+    padding-bottom: 85px !important; /* Prevents floating bar from covering content */
   }
 
   .hero {
@@ -1069,8 +1078,25 @@ body {
     padding: 0.5rem 0;
   }
 
+  .sticky-nav-wrapper .container {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .nav-tabs {
+    justify-content: flex-start !important;
+    padding: 0.35rem 1rem !important;
+    gap: 0.5rem !important;
+  }
+
   .tab-btn {
-    padding: 0.55rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.55rem 0.95rem !important;
+    font-size: 0.85rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .calculator-section {
+    padding: 1.25rem !important;
+    margin-bottom: 5rem !important;
   }
 }

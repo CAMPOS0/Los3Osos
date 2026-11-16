@@ -519,7 +519,6 @@ function initTabs() {
       const targetTab = btn.getAttribute('data-tab');
       if (targetTab) {
         switchTab(targetTab);
-        window.scrollTo({ top: 320, behavior: 'smooth' });
       }
     });
   });
@@ -536,6 +535,12 @@ function switchTab(tabId) {
   document.querySelectorAll('.mob-action-btn[data-tab]').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
   });
+
+  // Auto scroll active top tab into view horizontally on mobile
+  const activeTopBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+  if (activeTopBtn && typeof activeTopBtn.scrollIntoView === 'function') {
+    activeTopBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
 
   // Toggle sections
   const sections = ['venta', 'eventos', 'cotizador', 'qr'];
@@ -836,9 +841,9 @@ window.selectInCalculator = function(menuId) {
     if (variantSelect) variantSelect.removeAttribute('data-menu-id');
     select.dispatchEvent(new Event('change'));
   }
-  const calcSection = document.getElementById('section-cotizador');
-  if (calcSection) {
-    calcSection.scrollIntoView({ behavior: 'smooth' });
+  const navEl = document.querySelector('.sticky-nav-wrapper');
+  if (navEl) {
+    navEl.scrollIntoView({ behavior: 'smooth' });
   }
 };
 
