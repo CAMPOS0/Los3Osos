@@ -155,10 +155,10 @@ body {
 }
 
 .brand-sub {
-  font-size: 0.9rem;
-  letter-spacing: 3px;
+  font-size: 0.95rem;
+  letter-spacing: 3.5px;
   text-transform: uppercase;
-  color: var(--accent-blue);
+  color: #ffffff;
   font-weight: 700;
   margin-bottom: 0.35rem;
 }

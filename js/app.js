@@ -439,6 +439,84 @@ const MENU_EVENTOS_DATA = [
         items: ["Desechables y servilletas incluidas"]
       }
     ]
+  },
+  {
+    id: "e-12",
+    num: "12",
+    name: "Banquete de Lechón Completo",
+    category: "cortes",
+    priceDisplay: "$5,000",
+    unit: "pieza completa (aprox.)",
+    basePrice: 5000,
+    isFixedPrice: true,
+    badge: "Especialidad al Fuego",
+    badgeType: "chef",
+    description: "Lechón entero asado lentamente a las brasas y leña, con piel crujiente dorada y carne suave y jugosa. Rinde aproximadamente de 15 a 20 personas.",
+    inclusions: [
+      {
+        title: "Banquete de Lechón Completo Incluye",
+        items: [
+          "Lechón completo asado al fuego lento",
+          "Ensalada fresca de la casa",
+          "Guacamole recién preparado",
+          "Salsas artesanales (salsa molcajeteada y salsa de la casa)",
+          "Tortillas calientes",
+          "Acompañantes parrilleros"
+        ]
+      }
+    ]
+  },
+  {
+    id: "e-13",
+    num: "13",
+    name: "Banquete de Cabrito Entero",
+    category: "cortes",
+    priceDisplay: "$5,000",
+    unit: "pieza completa (aprox.)",
+    basePrice: 5000,
+    isFixedPrice: true,
+    badge: "Tradición Norteña",
+    badgeType: "chef",
+    description: "Auténtico Cabrito entero asado al estilo tradicional sobre brasas de carbón y mezquite, tierno y sazonado a la perfección. Rinde de 15 a 20 personas.",
+    inclusions: [
+      {
+        title: "Banquete de Cabrito Entero Incluye",
+        items: [
+          "Cabrito completo asado al carbón y leña",
+          "Ensalada fresca de la casa",
+          "Guacamole recién preparado",
+          "Salsas artesanales (salsa molcajeteada y salsa de la casa)",
+          "Tortillas calientes",
+          "Acompañantes parrilleros"
+        ]
+      }
+    ]
+  },
+  {
+    id: "e-14",
+    num: "14",
+    name: "Menú para Eventos 100% Personalizado",
+    category: "personalizado",
+    priceDisplay: "A tu medida",
+    unit: "cotización libre",
+    basePrice: 0,
+    isCustom: true,
+    badge: "A Tu Medida",
+    badgeType: "featured",
+    description: "¿Tienes requerimientos especiales o una idea específica para tu evento? Diseñamos la propuesta exacta combinando cortes, entradas, guarniciones y servicio a la medida.",
+    inclusions: [
+      {
+        title: "Arma tu Evento a la Medida",
+        items: [
+          "Cortes selectos (Rib Eye, Picaña, T-Bone, New York, Arrachera marinada)",
+          "Ahumados estilo Texas, espadas brasileñas, lechón o cabrito al gusto",
+          "Estaciones botaneras de mariscos, hamburguesas o taquizas",
+          "Entradas gourmet, mix de ensaladas, postres y complementos",
+          "Servicio de parrilleros profesionales y equipo completo",
+          "Cotización y asesoría directa por WhatsApp"
+        ]
+      }
+    ]
   }
 ];
 
@@ -793,10 +871,27 @@ function initCalculator() {
     }
 
     const guests = parseInt(guestsInput.value, 10) || 1;
-    const total = pricePerUnit * guests;
+    let total = 0;
+    let costSummaryText = '';
 
-    if (resultDisplay) {
-      resultDisplay.innerHTML = `$${total.toLocaleString('es-MX')} <small>MXN</small>`;
+    if (menuObj.isCustom) {
+      if (resultDisplay) {
+        resultDisplay.innerHTML = `A Tu Medida <small>Cotización directa</small>`;
+      }
+      costSummaryText = `💵 Presupuesto: A la medida`;
+    } else if (menuObj.isFixedPrice) {
+      const piezas = Math.max(1, Math.ceil(guests / 20));
+      total = menuObj.basePrice * piezas;
+      if (resultDisplay) {
+        resultDisplay.innerHTML = `$${total.toLocaleString('es-MX')} <small>MXN (${piezas} ${piezas > 1 ? 'piezas' : 'pieza'})</small>`;
+      }
+      costSummaryText = `💵 Costo Estimado: $${total.toLocaleString('es-MX')} MXN ($${menuObj.basePrice.toLocaleString('es-MX')} por pieza completa - aprox ${piezas} ${piezas > 1 ? 'piezas' : 'pieza'})`;
+    } else {
+      total = pricePerUnit * guests;
+      if (resultDisplay) {
+        resultDisplay.innerHTML = `$${total.toLocaleString('es-MX')} <small>MXN</small>`;
+      }
+      costSummaryText = `💵 Costo Estimado: $${total.toLocaleString('es-MX')} MXN ($${pricePerUnit} por persona)`;
     }
 
     // Build WhatsApp message
@@ -808,12 +903,20 @@ function initCalculator() {
       variantText = `\n- Modalidad: ${selectedOptionText}`;
     }
 
-    const message = `¡Hola Todo Asado Los 3 Osos! Me interesa cotizar un evento con los siguientes detalles:\n\n` +
-      `🔥 Menú #${menuObj.num}: ${menuObj.name}\n` +
-      `👥 Personas / Invitados: ${guests} personas\n` +
-      `💵 Costo Estimado: $${total.toLocaleString('es-MX')} MXN ($${pricePerUnit} por persona)` +
-      `${variantText}\n\n` +
-      `¿Tienen disponibilidad de fecha y qué incluye el servicio de parrilleros? ¡Gracias!`;
+    let message = '';
+    if (menuObj.isCustom) {
+      message = `¡Hola Todo Asado Los 3 Osos! Me interesa cotizar un Menú para Eventos 100% Personalizado:\n\n` +
+        `👥 Invitados aproximados: ${guests} personas\n` +
+        `🔥 Me gustaría recibir opciones y armar una propuesta a mi medida con cortes y parrilladas.\n\n` +
+        `¿Tienen disponibilidad de fecha? ¡Gracias!`;
+    } else {
+      message = `¡Hola Todo Asado Los 3 Osos! Me interesa cotizar un evento con los siguientes detalles:\n\n` +
+        `🔥 Menú #${menuObj.num}: ${menuObj.name}\n` +
+        `👥 Personas / Invitados: ${guests} personas\n` +
+        `${costSummaryText}` +
+        `${variantText}\n\n` +
+        `¿Tienen disponibilidad de fecha y qué incluye el servicio de parrilleros? ¡Gracias!`;
+    }
 
     if (sendWaBtn) {
       sendWaBtn.href = `${targetWaBase}?text=${encodeURIComponent(message)}`;
