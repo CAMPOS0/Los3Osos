@@ -597,14 +597,14 @@ function renderVentaMenu() {
     const badgeClass = item.badgeType === 'featured' ? 'badge-featured' : 
                        item.badgeType === 'chef' ? 'badge-chef' : 'badge-budget';
     
-    const waText = encodeURIComponent(`¡Hola Todo Asado Los 3 Osos! Me gustaría pedir: ${item.name} ($${item.price} MXN). ¿Tienen disponible para entrega/pedido?`);
+    const waText = encodeURIComponent(`¡Hola Todo Asado Los 3 Osos! Me gustaría hacer un pedido para este domingo: ${item.name} ($${item.price} MXN). ¿Tienen disponible para entrega/pedido?`);
     const waLink = `${CONTACT_CONFIG.whatsappBase1}?text=${waText}`;
 
     return `
       <div class="menu-card" data-category="${item.category}">
         <div>
           <span class="card-badge ${badgeClass}">
-            <i class="fa-solid fa-fire-flame-curved"></i> ${item.badge}
+            <i class="fa-solid fa-calendar-day"></i> Domingos · ${item.badge}
           </span>
           <div class="card-header-row">
             <h3 class="item-name">${item.name}</h3>
