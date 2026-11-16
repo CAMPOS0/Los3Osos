@@ -866,7 +866,7 @@ function initQRGenerator() {
 
   let currentUrl = window.location.href;
   if (currentUrl.startsWith('file://')) {
-    currentUrl = "https://tu-usuario.github.io/pagina-los-3-osos/";
+    currentUrl = "https://campos0.github.io/Pagina-Los-3-osos-MENUS/";
   }
 
   // Set input value
