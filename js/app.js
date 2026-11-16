@@ -451,7 +451,7 @@ const MENU_EVENTOS_DATA = [
     isFixedPrice: true,
     badge: "Especialidad al Fuego",
     badgeType: "chef",
-    description: "Lechón entero asado lentamente a las brasas y leña, con piel crujiente dorada y carne suave y jugosa. Rinde aproximadamente de 15 a 20 personas.",
+    description: "Lechón entero asado lentamente a las brasas y leña, con piel crujiente dorada y carne suave y jugosa. Rinde aproximadamente de 10 a 15 personas.",
     inclusions: [
       {
         title: "Banquete de Lechón Completo Incluye",
@@ -477,7 +477,7 @@ const MENU_EVENTOS_DATA = [
     isFixedPrice: true,
     badge: "Tradición Norteña",
     badgeType: "chef",
-    description: "Auténtico Cabrito entero asado al estilo tradicional sobre brasas de carbón y mezquite, tierno y sazonado a la perfección. Rinde de 15 a 20 personas.",
+    description: "Auténtico Cabrito entero asado al estilo tradicional sobre brasas de carbón y mezquite, tierno y sazonado a la perfección. Rinde aproximadamente de 10 a 15 personas.",
     inclusions: [
       {
         title: "Banquete de Cabrito Entero Incluye",
@@ -633,7 +633,7 @@ function switchTab(tabId) {
   const searchInput = document.getElementById('menu-search');
   if (searchInput) {
     if (tabId === 'eventos') {
-      searchInput.placeholder = 'Buscar en los 11 menús de eventos (ej. picaña, taquiza, rib eye, buffet)...';
+      searchInput.placeholder = 'Buscar en los menús de eventos (ej. lechón, cabrito, picaña, taquiza, buffet)...';
     } else {
       searchInput.placeholder = 'Buscar platillo, paquete o antojo (ej. arrachera, alitas, hamburguesa)...';
     }
@@ -880,12 +880,12 @@ function initCalculator() {
       }
       costSummaryText = `💵 Presupuesto: A la medida`;
     } else if (menuObj.isFixedPrice) {
-      const piezas = Math.max(1, Math.ceil(guests / 20));
+      const piezas = Math.max(1, Math.ceil(guests / 15));
       total = menuObj.basePrice * piezas;
       if (resultDisplay) {
         resultDisplay.innerHTML = `$${total.toLocaleString('es-MX')} <small>MXN (${piezas} ${piezas > 1 ? 'piezas' : 'pieza'})</small>`;
       }
-      costSummaryText = `💵 Costo Estimado: $${total.toLocaleString('es-MX')} MXN ($${menuObj.basePrice.toLocaleString('es-MX')} por pieza completa - aprox ${piezas} ${piezas > 1 ? 'piezas' : 'pieza'})`;
+      costSummaryText = `💵 Costo Estimado: $${total.toLocaleString('es-MX')} MXN ($${menuObj.basePrice.toLocaleString('es-MX')} por pieza completa - rinde aprox 10 a 15 personas: ${piezas} ${piezas > 1 ? 'piezas' : 'pieza'})`;
     } else {
       total = pricePerUnit * guests;
       if (resultDisplay) {

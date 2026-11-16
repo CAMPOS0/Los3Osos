@@ -38,7 +38,7 @@ Pagina Los 3 osos MENUS/
      - Antojos & Platillos: *Alitas 10pz ($100), Hamburguesa Casera 250g ($100), Tortas de Discada o Arrachera ($60), Tacos al Carbón ($20)*.
      - Complementos: *Orden de Papa Asada ($40), Papa con Carne ($60)*.
      - Visor en modal de la carta impresa original para consultas rápidas.
-   - **Menú de Eventos (11 Paquetes Completos)**:
+   - **Menú de Eventos (14 Opciones Exclusivas)**:
      1. Hamburguesas Parrilleras ($110, $160, $230)
      2. Hamburguesas Chicas ($70, $110, $160)
      3. Banquete Premium Picaña Rellena & Lechón a la Estaca ($580/persona)
@@ -50,6 +50,9 @@ Pagina Los 3 osos MENUS/
      9. Barra de Mariscos Botaneros ($240/persona)
      10. Taquiza Tradicional 5 variedades ($120/persona)
      11. Taquiza con Quesadillas al comal ($140/persona)
+     12. Banquete de Lechón Completo ($5,000 / pieza completa, rinde 10 a 15 personas)
+     13. Banquete de Cabrito Entero ($5,000 / pieza completa, rinde 10 a 15 personas)
+     14. Menú 100% Personalizado (Cotización a la medida)
 
 2. **Cotizador & Calculadora de Eventos Automática**:
    - Permite seleccionar el menú deseado y la cantidad de invitados.
