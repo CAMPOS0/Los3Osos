@@ -447,45 +447,80 @@ let currentTab = 'venta'; // 'venta' | 'eventos' | 'cotizador' | 'qr'
 let activeFilter = 'all';
 let searchQuery = '';
 
-// DOM Elements
-document.addEventListener('DOMContentLoaded', () => {
-  initTabs();
-  renderVentaMenu();
-  renderEventosMenu();
-  populateCalculatorOptions();
-  initCalculator();
-  initSearchAndFilters();
-  initModals();
-  initQRGenerator();
-});
+// Main App Initialization with safety checks
+function initApp() {
+  try {
+    initTabs();
+  } catch (err) {
+    console.error("Error initTabs:", err);
+  }
+
+  try {
+    renderVentaMenu();
+  } catch (err) {
+    console.error("Error renderVentaMenu:", err);
+  }
+
+  try {
+    renderEventosMenu();
+  } catch (err) {
+    console.error("Error renderEventosMenu:", err);
+  }
+
+  try {
+    populateCalculatorOptions();
+    initCalculator();
+  } catch (err) {
+    console.error("Error initCalculator:", err);
+  }
+
+  try {
+    initSearchAndFilters();
+  } catch (err) {
+    console.error("Error initSearchAndFilters:", err);
+  }
+
+  try {
+    initModals();
+  } catch (err) {
+    console.error("Error initModals:", err);
+  }
+
+  try {
+    initQRGenerator();
+  } catch (err) {
+    console.error("Error initQRGenerator:", err);
+  }
+}
+
+// Run immediately if DOM already parsed, or wait for event
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 /* ==========================================================================
    TABS NAVIGATION
    ========================================================================== */
 function initTabs() {
   const tabBtns = document.querySelectorAll('.tab-btn');
-  const sections = {
-    venta: document.getElementById('section-venta'),
-    eventos: document.getElementById('section-eventos'),
-    cotizador: document.getElementById('section-cotizador'),
-    qr: document.getElementById('section-qr')
-  };
-
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
-      switchTab(targetTab);
+      if (targetTab) switchTab(targetTab);
     });
   });
 
-  // Mobile Bottom Bar Navigation
   const mobBtns = document.querySelectorAll('.mob-action-btn[data-tab]');
   mobBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const targetTab = btn.getAttribute('data-tab');
-      switchTab(targetTab);
-      window.scrollTo({ top: 380, behavior: 'smooth' });
+      if (targetTab) {
+        switchTab(targetTab);
+        window.scrollTo({ top: 320, behavior: 'smooth' });
+      }
     });
   });
 }
@@ -507,12 +542,7 @@ function switchTab(tabId) {
   sections.forEach(id => {
     const el = document.getElementById(`section-${id}`);
     if (el) {
-      if (id === tabId) {
-        el.style.display = 'block';
-        el.style.animation = 'fadeIn 0.3s ease';
-      } else {
-        el.style.display = 'none';
-      }
+      el.style.display = (id === tabId) ? 'block' : 'none';
     }
   });
 
@@ -534,6 +564,7 @@ function switchTab(tabId) {
     chipsEventos.style.display = tabId === 'eventos' ? 'flex' : 'none';
   }
 }
+window.switchTab = switchTab;
 
 /* ==========================================================================
    RENDER MENÚ DE VENTA
@@ -638,7 +669,7 @@ function renderEventosMenu() {
     const waText = encodeURIComponent(`¡Hola Todo Asado Los 3 Osos! Me interesa cotizar el Menú para Eventos: "${item.name}" (${item.priceDisplay} ${item.unit}). Me gustaría recibir información de disponibilidad para mi evento.`);
     const waLink = `${CONTACT_CONFIG.whatsappBase1}?text=${waText}`;
 
-    // Variants HTML if any (e.g. burgers)
+    // Variants HTML if any
     let variantsHtml = '';
     if (item.variants && item.variants.length > 0) {
       variantsHtml = `
@@ -744,10 +775,9 @@ function initCalculator() {
     if (menuObj.variants && menuObj.variants.length > 0) {
       if (variantWrapper) variantWrapper.style.display = 'block';
       if (variantSelect) {
-        // If variants not yet built for this menu
         if (variantSelect.getAttribute('data-menu-id') !== selectedId) {
           variantSelect.setAttribute('data-menu-id', selectedId);
-          variantSelect.innerHTML = menuObj.variants.map((v, i) => `
+          variantSelect.innerHTML = menuObj.variants.map((v) => `
             <option value="${v.price}">${v.name} ($${v.price})</option>
           `).join('');
         }
@@ -765,8 +795,7 @@ function initCalculator() {
     }
 
     // Build WhatsApp message
-    const targetPhone = phoneSelect && phoneSelect.value === '2' ? CONTACT_CONFIG.phone2 : CONTACT_CONFIG.phone1;
-    const targetWaBase = phoneSelect && phoneSelect.value === '2' ? CONTACT_CONFIG.whatsappBase2 : CONTACT_CONFIG.whatsappBase1;
+    const targetWaBase = (phoneSelect && phoneSelect.value === '2') ? CONTACT_CONFIG.whatsappBase2 : CONTACT_CONFIG.whatsappBase1;
 
     let variantText = '';
     if (menuObj.variants && variantSelect) {
@@ -787,7 +816,6 @@ function initCalculator() {
   }
 
   select.addEventListener('change', () => {
-    // Reset variant select menu tracking
     if (variantSelect) variantSelect.removeAttribute('data-menu-id');
     updateCalculator();
   });
@@ -796,11 +824,9 @@ function initCalculator() {
   if (variantSelect) variantSelect.addEventListener('change', updateCalculator);
   if (phoneSelect) phoneSelect.addEventListener('change', updateCalculator);
 
-  // Initial calculation
   updateCalculator();
 }
 
-// Global helper to switch to calculator from any event card
 window.selectInCalculator = function(menuId) {
   switchTab('cotizador');
   const select = document.getElementById('calc-menu-select');
@@ -838,7 +864,7 @@ function initSearchAndFilters() {
     chip.addEventListener('click', () => {
       ventaChips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilter = chip.getAttribute('data-filter');
+      activeFilter = chip.getAttribute('data-filter') || 'all';
       renderVentaMenu();
     });
   });
@@ -849,7 +875,7 @@ function initSearchAndFilters() {
     chip.addEventListener('click', () => {
       eventosChips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilter = chip.getAttribute('data-filter');
+      activeFilter = chip.getAttribute('data-filter') || 'all';
       renderEventosMenu();
     });
   });
@@ -859,39 +885,29 @@ function initSearchAndFilters() {
    QR CODE GENERATOR & SHARING
    ========================================================================== */
 function initQRGenerator() {
-  const qrContainers = [
-    document.getElementById('modal-qr-canvas'),
-    document.getElementById('page-qr-canvas')
-  ];
-
-  let currentUrl = window.location.href;
-  if (currentUrl.startsWith('file://')) {
-    currentUrl = "https://campos0.github.io/Pagina-Los-3-osos-MENUS/";
+  let targetUrl = "https://campos0.github.io/Pagina-Los-3-osos-MENUS/";
+  if (typeof window !== 'undefined' && window.location.href && !window.location.href.startsWith('file://')) {
+    targetUrl = window.location.href;
   }
 
-  // Set input value
   const qrUrlInputs = document.querySelectorAll('.qr-url-input');
   qrUrlInputs.forEach(input => {
-    input.value = currentUrl;
+    input.value = targetUrl;
     input.addEventListener('change', () => {
       generateQRCodes(input.value.trim());
     });
   });
 
-  generateQRCodes(currentUrl);
+  generateQRCodes(targetUrl);
 
-  // Download QR code buttons
   document.querySelectorAll('.btn-download-qr').forEach(btn => {
-    btn.addEventListener('click', () => {
-      downloadQRCode();
-    });
+    btn.addEventListener('click', downloadQRCode);
   });
 
-  // Copy link buttons
   document.querySelectorAll('.btn-copy-link').forEach(btn => {
     btn.addEventListener('click', () => {
       const input = document.querySelector('.qr-url-input');
-      const textToCopy = input ? input.value : currentUrl;
+      const textToCopy = input ? input.value : targetUrl;
       navigator.clipboard.writeText(textToCopy).then(() => {
         showToast("¡Enlace copiado al portapapeles!");
       });
@@ -900,7 +916,7 @@ function initQRGenerator() {
 }
 
 function generateQRCodes(url) {
-  if (!url || typeof QRCode === 'undefined') return;
+  if (!url) return;
 
   const targets = [
     { el: document.getElementById('modal-qr-canvas'), size: 220 },
@@ -910,14 +926,34 @@ function generateQRCodes(url) {
   targets.forEach(({ el, size }) => {
     if (!el) return;
     el.innerHTML = '';
-    new QRCode(el, {
-      text: url,
-      width: size,
-      height: size,
-      colorDark: "#111111",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
+
+    // If QRCode.js library is loaded
+    if (typeof QRCode !== 'undefined') {
+      try {
+        new QRCode(el, {
+          text: url,
+          width: size,
+          height: size,
+          colorDark: "#111111",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        return;
+      } catch (e) {
+        console.warn("QRCode.js threw, using fallback:", e);
+      }
+    }
+
+    // Bulletproof Fallback Image via QR Server API
+    const encoded = encodeURIComponent(url);
+    const img = document.createElement('img');
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encoded}`;
+    img.alt = "Código QR Los 3 Osos";
+    img.style.width = `${size}px`;
+    img.style.height = `${size}px`;
+    img.style.display = "block";
+    img.crossOrigin = "anonymous";
+    el.appendChild(img);
   });
 }
 
@@ -929,66 +965,67 @@ function downloadQRCode() {
   const canvas = container.querySelector('canvas');
   let dataUrl = '';
 
-  if (img && img.src) {
+  if (canvas) {
+    try {
+      dataUrl = canvas.toDataURL("image/png");
+    } catch (e) {
+      console.warn("Canvas export restricted:", e);
+    }
+  }
+
+  if (!dataUrl && img && img.src) {
     dataUrl = img.src;
-  } else if (canvas) {
-    dataUrl = canvas.toDataURL("image/png");
   }
 
   if (dataUrl) {
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = 'QR-Menu-Los-3-Osos.png';
+    a.target = '_blank';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     showToast("¡Código QR descargado con éxito!");
   } else {
-    showToast("Generando QR... por favor espera un instante.");
+    showToast("Generando QR... espera un momento.");
   }
 }
 
 /* ==========================================================================
-   MODALS (QR & Menu Image Viewer)
+   MODALS
    ========================================================================== */
 function initModals() {
-  const qrModal = document.getElementById('qr-modal');
-  const imgModal = document.getElementById('img-modal');
-
-  // Open QR modal button
-  const openQrBtn = document.getElementById('btn-open-qr-modal');
-  if (openQrBtn && qrModal) {
-    openQrBtn.addEventListener('click', () => {
-      qrModal.classList.add('active');
-    });
-  }
-
-  // Open Image modal button
-  const openImgBtn = document.getElementById('btn-view-original-menu');
-  if (openImgBtn && imgModal) {
-    openImgBtn.addEventListener('click', () => {
-      imgModal.classList.add('active');
-    });
-  }
-
-  // Close modals
-  document.querySelectorAll('.modal-close, .modal-overlay').forEach(closer => {
-    closer.addEventListener('click', (e) => {
-      if (e.target === closer || closer.classList.contains('modal-close')) {
-        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeAllModals();
       }
     });
   });
 
-  // Escape key closes modal
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
-    }
+    if (e.key === 'Escape') closeAllModals();
   });
 }
 
-/* Simple Toast helper */
+function openQrModal() {
+  const m = document.getElementById('qr-modal');
+  if (m) m.classList.add('active');
+}
+window.openQrModal = openQrModal;
+
+function openImgModal() {
+  const m = document.getElementById('img-modal');
+  if (m) m.classList.add('active');
+}
+window.openImgModal = openImgModal;
+
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+}
+window.closeAllModals = closeAllModals;
+
+/* Toast */
 function showToast(message) {
   let toast = document.getElementById('custom-toast');
   if (!toast) {
