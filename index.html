@@ -98,6 +98,10 @@
         <input type="text" id="menu-search" class="search-input" placeholder="Buscar platillo, paquete o antojo (ej. arrachera, costilla, alitas)...">
       </div>
 
+      <div class="filter-heading">
+        <i class="fa-solid fa-filter"></i> Filtrar por Categoría:
+      </div>
+
       <!-- Category Filter Chips for Menú de Venta -->
       <div class="category-chips" id="chips-venta">
         <button type="button" class="chip-btn active" data-filter="all">Todos los Platillos</button>
@@ -207,8 +211,8 @@
 
             <div class="form-group">
               <label for="calc-guests"><i class="fa-solid fa-users" style="color: var(--primary);"></i> Número de Invitados / Personas:</label>
-              <input type="number" id="calc-guests" class="form-control" value="50" min="10" max="1000" step="5">
-              <span style="font-size: 0.78rem; color: var(--text-dim);">Recomendado: mínimo 20 personas para servicio de banquete completo con parrilleros.</span>
+              <input type="number" id="calc-guests" class="form-control" value="50" min="20" max="1000" step="5">
+              <span id="calc-min-hint" style="font-size: 0.85rem; display: block; margin-top: 0.45rem;"></span>
             </div>
 
             <div class="form-group">

@@ -792,10 +792,16 @@ function renderEventosMenu() {
     return `
       <div class="menu-card" data-category="${item.category}">
         <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
             <span class="card-badge ${badgeClass}">
               <i class="fa-solid fa-utensils"></i> Menú #${item.num} · ${item.badge}
             </span>
+            ${(() => {
+              const minG = getMinGuestsForMenu(item);
+              if (minG === 30) return `<span class="card-badge" style="background: rgba(255, 145, 51, 0.15); border-color: rgba(255, 145, 51, 0.5); color: #ff9133;"><i class="fa-solid fa-users"></i> Mínimo 30 pers.</span>`;
+              if (minG === 20) return `<span class="card-badge" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.5); color: var(--accent-blue);"><i class="fa-solid fa-users"></i> Mínimo 20 pers.</span>`;
+              return `<span class="card-badge" style="background: rgba(74, 222, 128, 0.15); border-color: rgba(74, 222, 128, 0.5); color: #4ade80;"><i class="fa-solid fa-check"></i> Cantidad libre</span>`;
+            })()}
           </div>
           
           <div class="card-header-row">
@@ -824,6 +830,22 @@ function renderEventosMenu() {
   }).join('');
 }
 
+/* Helper: Get minimum guests requirement per menu */
+function getMinGuestsForMenu(menuObj) {
+  if (!menuObj) return 1;
+  const num = parseInt(menuObj.num, 10);
+  // Menus 1, 2, 5, 10, 11 -> Mínimo 30 personas
+  if ([1, 2, 5, 10, 11].includes(num)) {
+    return 30;
+  }
+  // Menus 3, 4, 6, 7, 8, 9 -> Mínimo 20 personas
+  if ([3, 4, 6, 7, 8, 9].includes(num)) {
+    return 20;
+  }
+  // Restantes (12, 13, 14) -> Libre
+  return 1;
+}
+
 /* ==========================================================================
    INTERACTIVE EVENT QUOTE CALCULATOR
    ========================================================================== */
@@ -832,13 +854,16 @@ function populateCalculatorOptions() {
   if (!select) return;
 
   select.innerHTML = MENU_EVENTOS_DATA.map(item => {
-    return `<option value="${item.id}">${item.num}. ${item.name} (${item.priceDisplay} ${item.unit})</option>`;
+    const minG = getMinGuestsForMenu(item);
+    const minBadge = minG > 1 ? ` · Mínimo ${minG} pers.` : ` · Cantidad libre`;
+    return `<option value="${item.id}">${item.num}. ${item.name} (${item.priceDisplay} ${item.unit}${minBadge})</option>`;
   }).join('');
 }
 
 function initCalculator() {
   const select = document.getElementById('calc-menu-select');
   const guestsInput = document.getElementById('calc-guests');
+  const minHint = document.getElementById('calc-min-hint');
   const variantWrapper = document.getElementById('calc-variant-wrapper');
   const variantSelect = document.getElementById('calc-variant-select');
   const phoneSelect = document.getElementById('calc-phone-select');
@@ -851,6 +876,28 @@ function initCalculator() {
     const selectedId = select.value;
     const menuObj = MENU_EVENTOS_DATA.find(m => m.id === selectedId);
     if (!menuObj) return;
+
+    const minGuests = getMinGuestsForMenu(menuObj);
+    guestsInput.min = String(minGuests);
+
+    // Update helper text badge
+    if (minHint) {
+      if (minGuests === 30) {
+        minHint.innerHTML = `<span style="color: #ff9133; font-weight: 700;"><i class="fa-solid fa-triangle-exclamation"></i> Mínimo requerido: 30 personas</span> para este paquete de hamburguesas, buffet o taquiza.`;
+      } else if (minGuests === 20) {
+        minHint.innerHTML = `<span style="color: var(--accent-blue); font-weight: 700;"><i class="fa-solid fa-users"></i> Mínimo requerido: 20 personas</span> para servicio de banquete completo.`;
+      } else {
+        minHint.innerHTML = `<span style="color: #4ade80; font-weight: 600;"><i class="fa-solid fa-circle-check"></i> Cantidad libre</span> (sin mínimo forzado de invitados).`;
+      }
+    }
+
+    let enteredGuests = parseInt(guestsInput.value, 10);
+    if (isNaN(enteredGuests) || enteredGuests < 1) {
+      enteredGuests = minGuests;
+    }
+
+    // Enforce minimum limit strictly for calculations and quotes
+    const guests = Math.max(minGuests, enteredGuests);
 
     let pricePerUnit = menuObj.basePrice;
 
@@ -870,7 +917,6 @@ function initCalculator() {
       if (variantWrapper) variantWrapper.style.display = 'none';
     }
 
-    const guests = parseInt(guestsInput.value, 10) || 1;
     let total = 0;
     let costSummaryText = '';
 
@@ -903,6 +949,8 @@ function initCalculator() {
       variantText = `\n- Modalidad: ${selectedOptionText}`;
     }
 
+    const minGuestsBadge = minGuests > 1 ? ` (Mínimo: ${minGuests} pers.)` : ` (Cantidad libre)`;
+
     let message = '';
     if (menuObj.isCustom) {
       message = `¡Hola Todo Asado Los 3 Osos! Me interesa cotizar un Menú para Eventos 100% Personalizado:\n\n` +
@@ -912,7 +960,7 @@ function initCalculator() {
     } else {
       message = `¡Hola Todo Asado Los 3 Osos! Me interesa cotizar un evento con los siguientes detalles:\n\n` +
         `🔥 Menú #${menuObj.num}: ${menuObj.name}\n` +
-        `👥 Personas / Invitados: ${guests} personas\n` +
+        `👥 Personas / Invitados: ${guests} personas${minGuestsBadge}\n` +
         `${costSummaryText}` +
         `${variantText}\n\n` +
         `¿Tienen disponibilidad de fecha y qué incluye el servicio de parrilleros? ¡Gracias!`;
@@ -923,8 +971,41 @@ function initCalculator() {
     }
   }
 
+  // Auto-clamp when changing menu to higher minimum
   select.addEventListener('change', () => {
     if (variantSelect) variantSelect.removeAttribute('data-menu-id');
+    const selectedId = select.value;
+    const menuObj = MENU_EVENTOS_DATA.find(m => m.id === selectedId);
+    const minGuests = getMinGuestsForMenu(menuObj);
+    guestsInput.min = String(minGuests);
+    const currentVal = parseInt(guestsInput.value, 10) || 0;
+    if (currentVal < minGuests) {
+      guestsInput.value = minGuests;
+    }
+    updateCalculator();
+  });
+
+  // Clamp on change or blur so user cannot submit or leave less than minimum
+  guestsInput.addEventListener('change', () => {
+    const selectedId = select.value;
+    const menuObj = MENU_EVENTOS_DATA.find(m => m.id === selectedId);
+    const minGuests = getMinGuestsForMenu(menuObj);
+    const currentVal = parseInt(guestsInput.value, 10);
+    if (isNaN(currentVal) || currentVal < minGuests) {
+      guestsInput.value = minGuests;
+      showToast(`El Menú #${menuObj.num} requiere un mínimo de ${minGuests} personas.`);
+    }
+    updateCalculator();
+  });
+
+  guestsInput.addEventListener('blur', () => {
+    const selectedId = select.value;
+    const menuObj = MENU_EVENTOS_DATA.find(m => m.id === selectedId);
+    const minGuests = getMinGuestsForMenu(menuObj);
+    const currentVal = parseInt(guestsInput.value, 10);
+    if (isNaN(currentVal) || currentVal < minGuests) {
+      guestsInput.value = minGuests;
+    }
     updateCalculator();
   });
 
