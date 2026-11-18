@@ -475,6 +475,11 @@ body {
 }
 
 #section-cotizador {
+  min-height: 85vh;
+  scroll-margin-top: 85px;
+}
+
+.calculator-section {
   scroll-margin-top: 85px;
 }
 
@@ -1139,7 +1144,12 @@ body {
   }
 
   .menu-section,
-  #section-cotizador {
+  #section-cotizador,
+  .calculator-section {
     scroll-margin-top: 65px;
+  }
+
+  #section-cotizador {
+    min-height: 85vh;
   }
 }

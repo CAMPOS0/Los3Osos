@@ -654,42 +654,69 @@ function switchTab(tabId) {
   }
 
   // Smooth scroll directly to the target section so the user never lands at the bottom
-  setTimeout(() => {
-    const navWrapper = document.querySelector('.sticky-nav-wrapper');
-    const navOffset = navWrapper ? navWrapper.offsetHeight : 65;
+  if (tabId === 'cotizador') {
+    scrollToCalculator();
+  } else {
+    setTimeout(() => {
+      const navWrapper = document.querySelector('.sticky-nav-wrapper');
+      const navOffset = navWrapper ? navWrapper.offsetHeight : 65;
 
-    if (tabId === 'cotizador') {
-      const cotizadorEl = document.getElementById('section-cotizador');
-      if (cotizadorEl) {
-        const rect = cotizadorEl.getBoundingClientRect();
-        const targetY = window.pageYOffset + rect.top - navOffset - 12;
-        window.scrollTo({
-          top: Math.max(0, targetY),
-          behavior: 'smooth'
-        });
+      if (tabId === 'qr') {
+        const qrEl = document.getElementById('section-qr');
+        if (qrEl) {
+          qrEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        const navTop = navWrapper ? navWrapper.offsetTop : 300;
+        if (window.pageYOffset > navTop) {
+          window.scrollTo({
+            top: Math.max(0, navTop - 10),
+            behavior: 'smooth'
+          });
+        }
       }
-    } else if (tabId === 'qr') {
-      const qrEl = document.getElementById('section-qr');
-      if (qrEl) {
-        const rect = qrEl.getBoundingClientRect();
-        const targetY = window.pageYOffset + rect.top - navOffset - 12;
-        window.scrollTo({
-          top: Math.max(0, targetY),
-          behavior: 'smooth'
-        });
-      }
-    } else {
-      const navTop = navWrapper ? navWrapper.offsetTop : 300;
-      if (window.pageYOffset > navTop) {
-        window.scrollTo({
-          top: Math.max(0, navTop - 10),
-          behavior: 'smooth'
-        });
-      }
-    }
-  }, 40);
+    }, 40);
+  }
 }
 window.switchTab = switchTab;
+
+/* Dedicated helper to reliably scroll and position view at .calculator-section */
+function scrollToCalculator() {
+  const calcBox = document.querySelector('.calculator-section') || document.getElementById('section-cotizador');
+  if (!calcBox) return;
+
+  // Unfocus active button so browser does not retain focus/scroll on hidden card
+  if (document.activeElement && typeof document.activeElement.blur === 'function') {
+    document.activeElement.blur();
+  }
+
+  // Ensure cotizador section is displayed
+  const sec = document.getElementById('section-cotizador');
+  if (sec) sec.style.display = 'block';
+
+  const navWrapper = document.querySelector('.sticky-nav-wrapper');
+  const navHeight = navWrapper ? navWrapper.offsetHeight : 65;
+
+  // 1. Immediate position reset to prevent clamping at footer
+  const boxTop = calcBox.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
+  const targetY = Math.max(0, boxTop - navHeight - 12);
+  window.scrollTo(0, targetY);
+
+  // 2. Smooth alignment to the top of .calculator-section
+  requestAnimationFrame(() => {
+    calcBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // 3. Fallback verification: if browser was clamped or interrupted, hard align
+    setTimeout(() => {
+      const rect = calcBox.getBoundingClientRect();
+      if (rect.top < 0 || rect.top > (navHeight + 90)) {
+        const finalTop = calcBox.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - navHeight - 10;
+        window.scrollTo(0, Math.max(0, finalTop));
+      }
+    }, 150);
+  });
+}
+window.scrollToCalculator = scrollToCalculator;
 
 /* ==========================================================================
    RENDER MENÚ DE VENTA
@@ -1067,6 +1094,8 @@ window.selectInCalculator = function(menuId) {
     if (variantSelect) variantSelect.removeAttribute('data-menu-id');
     select.dispatchEvent(new Event('change'));
   }
+  // Scroll directly to .calculator-section
+  scrollToCalculator();
 };
 
 /* ==========================================================================
