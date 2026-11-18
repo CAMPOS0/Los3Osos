@@ -469,6 +469,15 @@ body {
   transform: translateY(-1px);
 }
 
+/* Menu Sections & Smooth Anchoring */
+.menu-section {
+  scroll-margin-top: 85px;
+}
+
+#section-cotizador {
+  scroll-margin-top: 85px;
+}
+
 /* Section Header */
 .section-header {
   margin-bottom: 1.75rem;
@@ -1127,5 +1136,10 @@ body {
   .calculator-section {
     padding: 1.25rem !important;
     margin-bottom: 5rem !important;
+  }
+
+  .menu-section,
+  #section-cotizador {
+    scroll-margin-top: 65px;
   }
 }

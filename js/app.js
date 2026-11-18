@@ -629,6 +629,12 @@ function switchTab(tabId) {
     }
   });
 
+  // Filter box: only show search & category chips for menu catalog tabs ('venta' & 'eventos')
+  const filterBox = document.querySelector('.filter-search-box');
+  if (filterBox) {
+    filterBox.style.display = (tabId === 'venta' || tabId === 'eventos') ? 'block' : 'none';
+  }
+
   // Reset search input placeholder based on tab
   const searchInput = document.getElementById('menu-search');
   if (searchInput) {
@@ -646,6 +652,42 @@ function switchTab(tabId) {
     chipsVenta.style.display = tabId === 'venta' ? 'flex' : 'none';
     chipsEventos.style.display = tabId === 'eventos' ? 'flex' : 'none';
   }
+
+  // Smooth scroll directly to the target section so the user never lands at the bottom
+  setTimeout(() => {
+    const navWrapper = document.querySelector('.sticky-nav-wrapper');
+    const navOffset = navWrapper ? navWrapper.offsetHeight : 65;
+
+    if (tabId === 'cotizador') {
+      const cotizadorEl = document.getElementById('section-cotizador');
+      if (cotizadorEl) {
+        const rect = cotizadorEl.getBoundingClientRect();
+        const targetY = window.pageYOffset + rect.top - navOffset - 12;
+        window.scrollTo({
+          top: Math.max(0, targetY),
+          behavior: 'smooth'
+        });
+      }
+    } else if (tabId === 'qr') {
+      const qrEl = document.getElementById('section-qr');
+      if (qrEl) {
+        const rect = qrEl.getBoundingClientRect();
+        const targetY = window.pageYOffset + rect.top - navOffset - 12;
+        window.scrollTo({
+          top: Math.max(0, targetY),
+          behavior: 'smooth'
+        });
+      }
+    } else {
+      const navTop = navWrapper ? navWrapper.offsetTop : 300;
+      if (window.pageYOffset > navTop) {
+        window.scrollTo({
+          top: Math.max(0, navTop - 10),
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, 40);
 }
 window.switchTab = switchTab;
 
@@ -1024,10 +1066,6 @@ window.selectInCalculator = function(menuId) {
     const variantSelect = document.getElementById('calc-variant-select');
     if (variantSelect) variantSelect.removeAttribute('data-menu-id');
     select.dispatchEvent(new Event('change'));
-  }
-  const navEl = document.querySelector('.sticky-nav-wrapper');
-  if (navEl) {
-    navEl.scrollIntoView({ behavior: 'smooth' });
   }
 };
 
