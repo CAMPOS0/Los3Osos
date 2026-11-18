@@ -527,6 +527,8 @@ let searchQuery = '';
 
 // Main App Initialization with safety checks
 function initApp() {
+  document.body.setAttribute('data-active-tab', currentTab || 'venta');
+
   try {
     initTabs();
   } catch (err) {
@@ -605,6 +607,9 @@ function initTabs() {
 function switchTab(tabId) {
   currentTab = tabId;
 
+  // Set active tab on body so CSS [data-active-tab] rules apply immediately
+  document.body.setAttribute('data-active-tab', tabId);
+
   // Update nav buttons
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
@@ -629,10 +634,15 @@ function switchTab(tabId) {
     }
   });
 
-  // Filter box: only show search & category chips for menu catalog tabs ('venta' & 'eventos')
-  const filterBox = document.querySelector('.filter-search-box');
+  // Filter box: strictly hide in 'cotizador' and 'qr' tabs
+  const filterBox = document.getElementById('filter-search-box') || document.querySelector('.filter-search-box');
   if (filterBox) {
-    filterBox.style.display = (tabId === 'venta' || tabId === 'eventos') ? 'block' : 'none';
+    if (tabId === 'cotizador' || tabId === 'qr') {
+      filterBox.style.setProperty('display', 'none', 'important');
+    } else {
+      filterBox.style.removeProperty('display');
+      filterBox.style.display = 'block';
+    }
   }
 
   // Reset search input placeholder based on tab
