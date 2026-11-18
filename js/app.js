@@ -1132,6 +1132,7 @@ function initSearchAndFilters() {
       chip.classList.add('active');
       activeFilter = chip.getAttribute('data-filter') || 'all';
       renderVentaMenu();
+      scrollToFirstMenuCard('venta-grid');
     });
   });
 
@@ -1143,9 +1144,41 @@ function initSearchAndFilters() {
       chip.classList.add('active');
       activeFilter = chip.getAttribute('data-filter') || 'all';
       renderEventosMenu();
+      scrollToFirstMenuCard('eventos-grid');
     });
   });
 }
+
+/* Helper: Scroll smoothly to the first menu-card of the active menu-grid */
+function scrollToFirstMenuCard(gridId) {
+  const targetGridId = gridId || (currentTab === 'eventos' ? 'eventos-grid' : 'venta-grid');
+  const grid = document.getElementById(targetGridId);
+  if (!grid) return;
+
+  requestAnimationFrame(() => {
+    const firstCard = grid.querySelector('.menu-card');
+    const target = firstCard || grid;
+
+    const navWrapper = document.querySelector('.sticky-nav-wrapper');
+    const navHeight = navWrapper ? navWrapper.offsetHeight : 65;
+
+    // Smooth scroll to the first card
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Fallback alignment check to ensure accurate positioning under sticky nav
+    setTimeout(() => {
+      const rect = target.getBoundingClientRect();
+      if (rect.top < 0 || rect.top > (navHeight + 110)) {
+        const targetTop = target.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - navHeight - 12;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  });
+}
+window.scrollToFirstMenuCard = scrollToFirstMenuCard;
 
 /* ==========================================================================
    QR CODE GENERATOR & SHARING

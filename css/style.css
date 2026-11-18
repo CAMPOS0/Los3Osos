@@ -476,7 +476,9 @@ body[data-active-tab="qr"] .filter-search-box {
 }
 
 /* Menu Sections & Smooth Anchoring */
-.menu-section {
+.menu-section,
+.menu-grid,
+.menu-card {
   scroll-margin-top: 85px;
 }
 
@@ -1151,7 +1153,9 @@ body[data-active-tab="qr"] .filter-search-box {
 
   .menu-section,
   #section-cotizador,
-  .calculator-section {
+  .calculator-section,
+  .menu-grid,
+  .menu-card {
     scroll-margin-top: 65px;
   }
 
