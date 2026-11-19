@@ -588,7 +588,7 @@ function initTabs() {
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
-      if (targetTab) switchTab(targetTab);
+      if (targetTab) switchTab(targetTab, true);
     });
   });
 
@@ -598,13 +598,13 @@ function initTabs() {
       e.preventDefault();
       const targetTab = btn.getAttribute('data-tab');
       if (targetTab) {
-        switchTab(targetTab);
+        switchTab(targetTab, true);
       }
     });
   });
 }
 
-function switchTab(tabId) {
+function switchTab(tabId, shouldScroll = true) {
   currentTab = tabId;
 
   // Set active tab on body so CSS [data-active-tab] rules apply immediately
@@ -618,12 +618,6 @@ function switchTab(tabId) {
   document.querySelectorAll('.mob-action-btn[data-tab]').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
   });
-
-  // Auto scroll active top tab into view horizontally on mobile
-  const activeTopBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
-  if (activeTopBtn && typeof activeTopBtn.scrollIntoView === 'function') {
-    activeTopBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }
 
   // Toggle sections
   const sections = ['venta', 'eventos', 'cotizador', 'qr'];
@@ -663,68 +657,57 @@ function switchTab(tabId) {
     chipsEventos.style.display = tabId === 'eventos' ? 'flex' : 'none';
   }
 
-  // Smooth scroll directly to the target section so the user never lands at the bottom
-  if (tabId === 'cotizador') {
-    scrollToCalculator();
-  } else {
-    setTimeout(() => {
-      const navWrapper = document.querySelector('.sticky-nav-wrapper');
-      const navOffset = navWrapper ? navWrapper.offsetHeight : 65;
-
-      if (tabId === 'qr') {
-        const qrEl = document.getElementById('section-qr');
-        if (qrEl) {
-          qrEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      } else {
-        const navTop = navWrapper ? navWrapper.offsetTop : 300;
-        if (window.pageYOffset > navTop) {
-          window.scrollTo({
-            top: Math.max(0, navTop - 10),
-            behavior: 'smooth'
-          });
-        }
-      }
-    }, 40);
+  // Smooth scroll to the filter box or first container after the nav
+  if (shouldScroll) {
+    scrollToTabContent(tabId);
   }
 }
 window.switchTab = switchTab;
 
-/* Dedicated helper to reliably scroll and position view at .calculator-section */
-function scrollToCalculator() {
-  const calcBox = document.querySelector('.calculator-section') || document.getElementById('section-cotizador');
-  if (!calcBox) return;
-
-  // Unfocus active button so browser does not retain focus/scroll on hidden card
+/* Dedicated helper: Scroll directly to filter or first container after the nav */
+function scrollToTabContent(tabId) {
+  // Unfocus active button so browser does not retain active focus outline
   if (document.activeElement && typeof document.activeElement.blur === 'function') {
     document.activeElement.blur();
   }
 
-  // Ensure cotizador section is displayed
-  const sec = document.getElementById('section-cotizador');
-  if (sec) sec.style.display = 'block';
-
-  const navWrapper = document.querySelector('.sticky-nav-wrapper');
-  const navHeight = navWrapper ? navWrapper.offsetHeight : 65;
-
-  // 1. Immediate position reset to prevent clamping at footer
-  const boxTop = calcBox.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
-  const targetY = Math.max(0, boxTop - navHeight - 12);
-  window.scrollTo(0, targetY);
-
-  // 2. Smooth alignment to the top of .calculator-section
   requestAnimationFrame(() => {
-    calcBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    let targetEl = null;
 
-    // 3. Fallback verification: if browser was clamped or interrupted, hard align
+    if (tabId === 'venta' || tabId === 'eventos') {
+      // First container after nav is filter-search-box
+      targetEl = document.getElementById('filter-search-box') || document.getElementById(`section-${tabId}`);
+    } else if (tabId === 'cotizador') {
+      // First container after nav is calculator-section
+      targetEl = document.querySelector('.calculator-section') || document.getElementById('section-cotizador');
+    } else if (tabId === 'qr') {
+      // First container after nav is QR section
+      targetEl = document.querySelector('#section-qr .calculator-section') || document.getElementById('section-qr');
+    }
+
+    if (!targetEl) return;
+
+    // Smooth scroll directly to the first container after the nav
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Fallback alignment check to guarantee exact positioning
     setTimeout(() => {
-      const rect = calcBox.getBoundingClientRect();
-      if (rect.top < 0 || rect.top > (navHeight + 90)) {
-        const finalTop = calcBox.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - navHeight - 10;
-        window.scrollTo(0, Math.max(0, finalTop));
+      const rect = targetEl.getBoundingClientRect();
+      if (rect.top < -15 || rect.top > 120) {
+        const targetTop = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 15;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: 'smooth'
+        });
       }
-    }, 150);
+    }, 120);
   });
+}
+window.scrollToTabContent = scrollToTabContent;
+
+/* Helper alias for backward compatibility with existing buttons */
+function scrollToCalculator() {
+  scrollToTabContent('cotizador');
 }
 window.scrollToCalculator = scrollToCalculator;
 
@@ -1096,7 +1079,7 @@ function initCalculator() {
 }
 
 window.selectInCalculator = function(menuId) {
-  switchTab('cotizador');
+  switchTab('cotizador', true);
   const select = document.getElementById('calc-menu-select');
   if (select) {
     select.value = menuId;
@@ -1104,8 +1087,6 @@ window.selectInCalculator = function(menuId) {
     if (variantSelect) variantSelect.removeAttribute('data-menu-id');
     select.dispatchEvent(new Event('change'));
   }
-  // Scroll directly to .calculator-section
-  scrollToCalculator();
 };
 
 /* ==========================================================================

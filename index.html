@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.5">
+  <link rel="stylesheet" href="css/style.css?v=2.6">
 </head>
 <body>
 
@@ -68,21 +68,52 @@
     </div>
   </section>
 
-  <!-- Sticky Navigation Tabs -->
+  <!-- Main Navigation Sections (Single Column / Rows / Large Buttons) -->
   <nav class="sticky-nav-wrapper">
     <div class="container">
       <div class="nav-tabs" role="tablist">
-        <button type="button" class="tab-btn active" data-tab="venta" onclick="switchTab('venta')" role="tab">
-          <i class="fa-solid fa-utensils"></i> Menú de Venta
+        <button type="button" class="tab-btn active" data-tab="venta" onclick="switchTab('venta', true)" role="tab">
+          <span class="tab-btn-content">
+            <i class="fa-solid fa-utensils"></i>
+            <span class="tab-btn-text">
+              <span class="tab-btn-title">Menú de Venta Directa</span>
+              <span class="tab-btn-desc">Cortes, costillas, chamorro y discada (Solo Domingos)</span>
+            </span>
+          </span>
+          <i class="fa-solid fa-chevron-right tab-btn-arrow"></i>
         </button>
-        <button type="button" class="tab-btn" data-tab="eventos" onclick="switchTab('eventos')" role="tab">
-          <i class="fa-solid fa-champagne-glasses"></i> Menú de Eventos
+
+        <button type="button" class="tab-btn" data-tab="eventos" onclick="switchTab('eventos', true)" role="tab">
+          <span class="tab-btn-content">
+            <i class="fa-solid fa-champagne-glasses"></i>
+            <span class="tab-btn-text">
+              <span class="tab-btn-title">Menú de Eventos & Banquetes</span>
+              <span class="tab-btn-desc">14 Paquetes con servicio completo de parrilleros para fiestas</span>
+            </span>
+          </span>
+          <i class="fa-solid fa-chevron-right tab-btn-arrow"></i>
         </button>
-        <button type="button" class="tab-btn" data-tab="cotizador" onclick="switchTab('cotizador')" role="tab">
-          <i class="fa-solid fa-calculator"></i> Cotizador
+
+        <button type="button" class="tab-btn" data-tab="cotizador" onclick="switchTab('cotizador', true)" role="tab">
+          <span class="tab-btn-content">
+            <i class="fa-solid fa-calculator"></i>
+            <span class="tab-btn-text">
+              <span class="tab-btn-title">Cotizador Interactivo de Eventos</span>
+              <span class="tab-btn-desc">Calcula tu presupuesto por persona o pieza y cotiza por WhatsApp</span>
+            </span>
+          </span>
+          <i class="fa-solid fa-chevron-right tab-btn-arrow"></i>
         </button>
-        <button type="button" class="tab-btn" data-tab="qr" onclick="switchTab('qr')" role="tab">
-          <i class="fa-solid fa-qrcode"></i> Código QR
+
+        <button type="button" class="tab-btn" data-tab="qr" onclick="switchTab('qr', true)" role="tab">
+          <span class="tab-btn-content">
+            <i class="fa-solid fa-qrcode"></i>
+            <span class="tab-btn-text">
+              <span class="tab-btn-title">Código QR del Menú Digital</span>
+              <span class="tab-btn-desc">Código QR interactivo para compartir o imprimir en mesas</span>
+            </span>
+          </span>
+          <i class="fa-solid fa-chevron-right tab-btn-arrow"></i>
         </button>
       </div>
     </div>
@@ -404,6 +435,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <!-- Main JavaScript App -->
-  <script src="js/app.js?v=2.5"></script>
+  <script src="js/app.js?v=2.6"></script>
 </body>
 </html>
